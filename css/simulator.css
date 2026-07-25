@@ -1,0 +1,62 @@
+/* ===================================================
+   KVB VoltAR Version 3.0
+   Ohm Simulator Styles
+=================================================== */
+
+.card{
+    max-width:700px;
+    margin:40px auto;
+}
+
+.card h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#1976D2;
+}
+
+label{
+    display:block;
+    margin-top:20px;
+    margin-bottom:8px;
+    font-weight:bold;
+    font-size:18px;
+}
+
+input[type=range]{
+    width:100%;
+    cursor:pointer;
+}
+
+.value{
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#1976D2;
+    margin:15px 0;
+}
+
+hr{
+    margin:30px 0;
+}
+
+h3{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.btn{
+    margin-top:15px;
+}
+
+#currentValue{
+    font-size:40px;
+    color:#4CAF50;
+}
+
+@media(max-width:768px){
+
+    .card{
+        margin:20px;
+    }
+
+}

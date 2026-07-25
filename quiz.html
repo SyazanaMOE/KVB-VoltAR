@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KVB VoltAR - Penilaian</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+.quiz-container{
+    text-align:center;
+}
+
+.option-button{
+
+    width:80%;
+    padding:12px;
+    margin:8px;
+
+    font-size:17px;
+
+}
+
+#result{
+
+    font-size:22px;
+    font-weight:bold;
+
+    margin-top:20px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+<div class="card quiz-container">
+
+
+<h1>KVB VoltAR</h1>
+
+<h2 id="title">
+
+PENILAIAN
+
+</h2>
+
+
+<div id="startPage">
+
+<p>
+
+Sila pilih jenis penilaian.
+
+</p>
+
+
+<button class="option-button"
+onclick="startQuiz('Pra-Ujian')">
+
+📝 Pra-Ujian
+
+</button>
+
+
+<br>
+
+
+<button class="option-button"
+onclick="startQuiz('Pasca-Ujian')">
+
+📘 Pasca-Ujian
+
+</button>
+
+
+<br><br>
+
+
+<button class="option-button"
+onclick="window.location.href='menu.html'">
+
+⬅️ Kembali ke Menu
+
+</button>
+
+
+</div>
+
+
+<div id="quizPage" style="display:none;">
+
+
+<h3 id="questionNumber"></h3>
+<p id="quizInfo"
+style="font-size:16px;
+font-weight:bold;
+color:#1565c0;
+margin-bottom:20px;">
+
+Topik:
+Hukum Ohm dan Kerintangan Elektrik
+
+<br><br>
+
+Arahan:
+Jawab semua soalan dengan memilih SATU jawapan yang paling tepat.
+
+</p>
+
+<p id="question"></p>
+
+
+<div id="options"></div>
+
+
+<button id="nextButton"
+class="option-button"
+onclick="nextQuestion()"
+disabled>
+
+Seterusnya
+
+</button>
+
+
+
+
+</div>
+
+
+<div id="result"></div>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+let mode="";
+
+let currentQuestion=0;
+
+let score=0;
+
+
+const questions=[
+
+
+{
+
+question:"Apakah formula yang betul bagi Hukum Ohm?",
+
+options:[
+
+"A. V = I × R",
+
+"B. V = I ÷ R",
+
+"C. R = V × I",
+
+"D. I = V × R"
+
+],
+
+answer:"A"
+
+},
+
+
+{
+
+question:"Apakah unit SI bagi rintangan elektrik?",
+
+options:[
+
+"A. Volt (V)",
+
+"B. Ampere (A)",
+
+"C. Ohm (Ω)",
+
+"D. Watt (W)"
+
+],
+
+answer:"C"
+
+},
+
+
+{
+
+question:"Sebuah litar mempunyai voltan 12 V dan rintangan 4 Ω. Berapakah nilai arus?",
+
+options:[
+
+"A. 2 A",
+
+"B. 3 A",
+
+"C. 4 A",
+
+"D. 48 A"
+
+],
+
+answer:"B"
+
+},
+
+
+{
+
+question:"Faktor manakah menyebabkan kerintangan sesuatu konduktor meningkat?",
+
+options:[
+
+"A. Panjang konduktor berkurang",
+
+"B. Luas keratan rentas bertambah",
+
+"C. Panjang konduktor bertambah",
+
+"D. Suhu konduktor berkurang"
+
+],
+
+answer:"C"
+
+},
+
+
+{
+
+question:"Wayar A lebih panjang daripada Wayar B tetapi bahan dan luas keratan rentas adalah sama. Apakah keadaan kerintangan Wayar A?",
+
+options:[
+
+"A. Lebih rendah",
+
+"B. Lebih tinggi",
+
+"C. Sama",
+
+"D. Tiada perubahan"
+
+],
+
+answer:"B"
+
+}
+
+
+];
+
+
+
+function startQuiz(selectedMode){
+
+mode=selectedMode;
+
+document.getElementById("startPage").style.display="none";
+
+document.getElementById("quizPage").style.display="block";
+
+document.getElementById("title").innerHTML=mode;
+
+showQuestion();
+
+}
+
+
+
+function showQuestion(){
+
+
+let q=questions[currentQuestion];
+
+
+document.getElementById("questionNumber").innerHTML=
+
+"Soalan "+(currentQuestion+1)+" daripada 5";
+
+
+document.getElementById("question").innerHTML=q.question;
+
+
+let optionHTML="";
+
+
+q.options.forEach(function(option){
+
+let letter=option.charAt(0);
+
+
+optionHTML+=`
+
+<button class="option-button"
+onclick="checkAnswer('${letter}')">
+
+${option}
+
+</button>
+
+`;
+
+});
+
+
+document.getElementById("options").innerHTML=optionHTML;
+document.getElementById("nextButton").disabled = true;
+
+}
+
+
+
+function checkAnswer(answer){
+
+if(answer===questions[currentQuestion].answer){
+
+score++;
+
+}
+
+document.getElementById("nextButton").disabled = false;
+
+}
+
+
+
+
+
+
+function nextQuestion(){
+
+
+currentQuestion++;
+
+
+if(currentQuestion<questions.length){
+
+showQuestion();
+
+}
+
+else{
+
+showResult();
+
+}
+
+
+}
+
+
+
+function showResult(){
+
+
+document.getElementById("quizPage").style.display="none";
+
+
+let percentage=(score/5)*100;
+let feedback="";
+
+if(score===5){
+
+feedback="🌟 Cemerlang! Anda menguasai konsep Hukum Ohm dan Kerintangan Elektrik.";
+
+}
+
+else if(score>=3){
+
+feedback="👍 Bagus! Anda mempunyai kefahaman yang baik. Teruskan membuat ulang kaji.";
+
+}
+
+else{
+
+feedback="📚 Perlu dipertingkatkan. Sila ulang kaji konsep asas Hukum Ohm dan Kerintangan Elektrik.";
+
+}
+
+document.getElementById("result").innerHTML=
+
+`
+
+<h2>Selesai!</h2>
+
+<p>${mode}</p>
+
+<p>Markah: ${score} / 5</p>
+
+<p>${percentage}%</p>
+
+<p>${feedback}</p>
+
+
+<button class="option-button"
+onclick="location.reload()">
+
+Cuba Lagi
+
+</button>
+
+
+<br>
+
+
+<button class="option-button"
+onclick="window.location.href='menu.html'">
+
+Kembali ke Menu
+
+</button>
+
+`;
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

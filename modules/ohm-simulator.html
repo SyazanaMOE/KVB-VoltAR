@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVB VoltAR - Ohm Simulator</title>
+
+    <!-- CSS sedia ada -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- CSS khusus untuk simulator (akan kita bina kemudian) -->
+    <link rel="stylesheet" href="../css/simulator.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>⚡ KVB VoltAR</h1>
+        <p>Ohm Simulator</p>
+    </header>
+
+    <main class="container">
+
+        <div class="card">
+
+            <h2>Ohm's Law Simulator</h2>
+
+            <br>
+
+            <label for="voltage">
+                Voltage (V)
+            </label>
+
+            <input
+                type="range"
+                id="voltage"
+                min="0"
+                max="24"
+                value="6">
+
+            <div id="voltageValue" class="value">
+                6 V
+            </div>
+
+            <br>
+
+            <label for="resistance">
+                Resistance (Ω)
+            </label>
+
+            <input
+                type="range"
+                id="resistance"
+                min="1"
+                max="20"
+                value="3">
+
+            <div id="resistanceValue" class="value">
+                3 Ω
+            </div>
+
+            <hr>
+
+            <h3>Current</h3>
+
+            <div id="currentValue" class="value">
+                2.00 A
+            </div>
+
+            <button id="calculateBtn" class="btn">
+                Calculate
+            </button>
+
+            <button id="resetBtn" class="btn">
+                Reset
+            </button>
+
+        </div>
+
+    </main>
+
+    <footer>
+
+        KVB VoltAR Version 3.0
+
+    </footer>
+
+    <script src="../js/ohm.js"></script>
+
+</body>
+</html>
