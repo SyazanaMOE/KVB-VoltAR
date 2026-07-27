@@ -14,27 +14,25 @@
 <style>
 
 body{
-margin:0;
-overflow:hidden;
+    margin:0;
+    overflow:hidden;
 }
 
 #backButton{
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:999;
 
-position:fixed;
-top:20px;
-left:20px;
-z-index:999;
+    padding:12px 20px;
 
-padding:12px 20px;
+    background:#1565c0;
+    color:white;
 
-background:#1565c0;
-color:white;
+    border:none;
+    border-radius:8px;
 
-border:none;
-border-radius:8px;
-
-font-size:16px;
-
+    font-size:16px;
 }
 
 </style>
@@ -43,7 +41,8 @@ font-size:16px;
 
 <body>
 
-<button id="backButton"
+<button
+id="backButton"
 onclick="window.location.href='resistance.html'">
 
 ← Kembali
@@ -52,121 +51,229 @@ onclick="window.location.href='resistance.html'">
 
 <a-scene
 embedded
-arjs="sourceType:webcam; debugUIEnabled:false;">
+arjs="sourceType: webcam; debugUIEnabled:false;">
 
 <a-marker preset="hiro">
 
-<!-- Tajuk -->
+<a-entity
+id="resistanceScene"
+scale="0.45 0.45 0.45">
+
+
+<!-- ========================= -->
+<!-- PANEL TAJUK DAN FORMULA -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 2.85 -0.08"
+    width="2.70"
+    height="0.78"
+    color="#E8F5E9"
+    opacity="0.95">
+</a-plane>
 
 <a-text
-
-value="KERINTANGAN"
-
-position="0 2.4 0"
-
-align="center"
-
-scale="1.2 1.2 1.2"
-
-color="green">
-
+    value="FAKTOR KERINTANGAN"
+    position="0 3.02 0.02"
+    align="center"
+    width="3.80"
+    color="#1B5E20">
 </a-text>
-
-<!-- Formula -->
 
 <a-text
-
-value="R = (rho)L / A"
-
-position="0 2.0 0"
-
-align="center"
-
-scale="1 1 1"
-
-color="blue">
-
+    value="R = rho L / A"
+    position="0 2.70 0.02"
+    align="center"
+    width="3.20"
+    color="#0D47A1">
 </a-text>
 
-<!-- Konduktor -->
+
+<!-- ========================= -->
+<!-- PENERANGAN FORMULA -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 2.27 -0.08"
+    width="2.55"
+    height="0.40"
+    color="#FFFFFF"
+    opacity="0.95">
+</a-plane>
+
+<a-text
+    value="Kerintangan bergantung pada\njenis bahan, panjang dan luas."
+    position="0 2.27 0.02"
+    align="center"
+    width="2.75"
+    color="#263238">
+</a-text>
+
+
+<!-- ========================= -->
+<!-- MODEL KONDUKTOR -->
+<!-- ========================= -->
 
 <a-cylinder
-
-position="0 0.5 0"
-
-rotation="0 0 90"
-
-radius="0.08"
-
-height="2.2"
-
-color="#BDBDBD">
-
+    position="0 1.15 0"
+    rotation="0 0 90"
+    radius="0.10"
+    height="2.20"
+    color="#B87333">
 </a-cylinder>
 
-<!-- Anak panah Panjang -->
+
+<!-- ========================= -->
+<!-- PENUNJUK PANJANG L -->
+<!-- ========================= -->
 
 <a-text
-
-value="<------ L ------>"
-
-position="0 -0.1 0"
-
-align="center"
-
-scale="0.8 0.8 0.8"
-
-color="red">
-
+    value="<------ L ------>"
+    position="0 0.78 0.02"
+    align="center"
+    width="3.30"
+    color="#D50000">
 </a-text>
 
-<!-- Label Luas -->
+
+<!-- ========================= -->
+<!-- PANEL JENIS BAHAN -->
+<!-- ========================= -->
+
+<a-plane
+    position="-1.20 1.47 -0.08"
+    width="1.20"
+    height="0.72"
+    color="#F3E5F5"
+    opacity="0.95">
+</a-plane>
 
 <a-text
-
-value="A"
-
-position="1.35 0.8 0"
-
-align="center"
-
-scale="1 1 1"
-
-color="orange">
-
+    value="JENIS BAHAN"
+    position="-1.20 1.68 0.02"
+    align="center"
+    width="1.70"
+    color="#6A1B9A">
 </a-text>
-
-<!-- Label Bahan -->
 
 <a-text
-
-value="rho = KUPRUM"
-
-position="-1.2 1.1 0"
-
-align="center"
-
-scale="0.7 0.7 0.7"
-
-color="purple">
-
+    value="rho = kuprum\nNilai rho berbeza\nmengikut bahan."
+    position="-1.20 1.33 0.02"
+    align="center"
+    width="1.55"
+    color="#6A1B9A">
 </a-text>
 
-<!-- Nota -->
+
+<!-- ========================= -->
+<!-- PANEL LUAS KERATAN RENTAS -->
+<!-- ========================= -->
+
+<a-plane
+    position="1.20 1.47 -0.08"
+    width="1.20"
+    height="0.72"
+    color="#FFF3E0"
+    opacity="0.95">
+</a-plane>
 
 <a-text
-
-value="Panjang ↑\nKerintangan ↑"
-
-position="0 -0.9 0"
-
-align="center"
-
-scale="0.7 0.7 0.7"
-
-color="black">
-
+    value="LUAS (A)"
+    position="1.20 1.68 0.02"
+    align="center"
+    width="1.70"
+    color="#E65100">
 </a-text>
+
+<a-text
+    value="Luas lebih besar,\nkerintangan\nlebih kecil."
+    position="1.20 1.33 0.02"
+    align="center"
+    width="1.55"
+    color="#E65100">
+</a-text>
+
+
+<!-- ========================= -->
+<!-- PANEL PANJANG WAYAR -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 0.20 -0.08"
+    width="2.10"
+    height="0.70"
+    color="#E3F2FD"
+    opacity="0.95">
+</a-plane>
+
+<a-text
+    value="PANJANG WAYAR (L)"
+    position="0 0.40 0.02"
+    align="center"
+    width="2.70"
+    color="#0D47A1">
+</a-text>
+
+<a-text
+    value="Semakin panjang wayar,\nsemakin tinggi kerintangan."
+    position="0 0.07 0.02"
+    align="center"
+    width="2.20"
+    color="#0D47A1">
+</a-text>
+
+
+<!-- ========================= -->
+<!-- RUMUSAN HUBUNGAN -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 -0.72 -0.08"
+    width="2.75"
+    height="0.95"
+    color="#ECEFF1"
+    opacity="0.95">
+</a-plane>
+
+<a-text
+    value="RUMUSAN"
+    position="0 -0.44 0.02"
+    align="center"
+    width="2.50"
+    color="#212121">
+</a-text>
+
+<a-text
+    value="L meningkat, R meningkat\nA meningkat, R menurun\nrho meningkat, R meningkat"
+    position="0 -0.82 0.02"
+    align="center"
+    width="2.30"
+    color="#212121">
+</a-text>
+
+
+<!-- ========================= -->
+<!-- NOTA AKHIR -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 -1.55 -0.08"
+    width="2.65"
+    height="0.50"
+    color="#E8F5E9"
+    opacity="0.95">
+</a-plane>
+
+<a-text
+    value="R = rho L / A"
+    position="0 -1.55 0.02"
+    align="center"
+    width="3.00"
+    color="#1B5E20">
+</a-text>
+
+
+</a-entity>
 
 </a-marker>
 
