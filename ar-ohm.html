@@ -5,13 +5,15 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>KVB VoltAR - Litar Hukum Ohm</title>
 
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
 
 <style>
 
@@ -21,27 +23,20 @@ body{
 }
 
 #backButton{
-
     position:fixed;
-
     top:20px;
-
     left:20px;
-
     z-index:999;
 
     padding:12px 20px;
 
     background:#1565c0;
-
     color:white;
 
     border:none;
-
     border-radius:8px;
 
     font-size:16px;
-
 }
 
 </style>
@@ -52,7 +47,8 @@ body{
 <body>
 
 
-<button id="backButton"
+<button
+id="backButton"
 onclick="window.location.href='ohm.html'">
 
 ← Kembali
@@ -64,6 +60,11 @@ onclick="window.location.href='ohm.html'">
 embedded
 arjs="sourceType: webcam; debugUIEnabled:false;">
 
+
+<!-- ========================= -->
+<!-- ASET MODEL -->
+<!-- ========================= -->
+
 <a-assets>
 
     <a-asset-item
@@ -73,9 +74,102 @@ arjs="sourceType: webcam; debugUIEnabled:false;">
 
 </a-assets>
 
+
 <a-marker preset="hiro">
 
-<a-entity id="ohmScene" scale="0.65 0.65 0.65">
+
+<!-- ========================= -->
+<!-- KESELURUHAN PAPARAN AR -->
+<!-- ========================= -->
+
+<a-entity
+id="ohmScene"
+scale="0.45 0.45 0.45">
+
+
+<!-- ========================= -->
+<!-- PANEL FORMULA HUKUM OHM -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 2.85 -0.08"
+    width="2.60"
+    height="0.72"
+    color="#E8F5E9"
+    opacity="0.95">
+</a-plane>
+
+<a-text
+    value="HUKUM OHM"
+    position="0 3.02 0.02"
+    align="center"
+    width="3.80"
+    color="#1B5E20">
+</a-text>
+
+<a-text
+    value="V = I x R"
+    position="0 2.72 0.02"
+    align="center"
+    width="3.20"
+    color="#1B5E20">
+</a-text>
+
+
+<!-- ========================= -->
+<!-- PENERANGAN FORMULA -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 2.28 -0.08"
+    width="2.45"
+    height="0.38"
+    color="#FFFFFF"
+    opacity="0.95">
+</a-plane>
+
+<a-text
+    value="Hubungan antara voltan,\narus dan rintangan."
+    position="0 2.28 0.02"
+    align="center"
+    width="2.65"
+    color="#263238">
+</a-text>
+
+
+<!-- ========================= -->
+<!-- TAJUK SUMBER VOLTAN -->
+<!-- ========================= -->
+
+<a-text
+    value="SUMBER VOLTAN (V)"
+    position="0 1.88 0.02"
+    align="center"
+    width="3.30"
+    color="#0D47A1">
+</a-text>
+
+
+<!-- ========================= -->
+<!-- PENERANGAN SUMBER VOLTAN -->
+<!-- ========================= -->
+
+<a-plane
+    position="0 1.55 -0.08"
+    width="1.90"
+    height="0.34"
+    color="#E3F2FD"
+    opacity="0.95">
+</a-plane>
+
+<a-text
+    value="Membekalkan tenaga kepada litar."
+    position="0 1.55 0.02"
+    align="center"
+    width="2.25"
+    color="#0D47A1">
+</a-text>
+
 
 <!-- ========================= -->
 <!-- MODEL BATERI -->
@@ -83,52 +177,51 @@ arjs="sourceType: webcam; debugUIEnabled:false;">
 
 <a-entity
     gltf-model="#batteryModel"
-    position="-0.90 0.35 0"
-    rotation="0 180 90"
+    position="0 0.75 0"
+    rotation="180 180 0"
     scale="5.5 5.5 5.5">
 </a-entity>
 
 
 <!-- ========================= -->
-<!-- LABEL BATERI -->
+<!-- LABEL TERMINAL POSITIF -->
 <!-- ========================= -->
 
-<a-text
-value="SUMBER VOLTAN (V)"
-position="-0.90 1.80 0"
-align="center"
-scale="0.8 0.8 0.8"
-color="blue">
-</a-text>
 <a-plane
-position="-1.20 2.15 -0.02"
-width="1.5"
-height="0.45"
-color="#E3F2FD"
-opacity="0.9">
+    position="-1.10 1.02 -0.08"
+    width="1.05"
+    height="0.38"
+    color="#FFEBEE"
+    opacity="0.95">
 </a-plane>
 
 <a-text
-value="Membekalkan tenaga\nkepada litar."
-position="-1.20 2.15 0"
-align="center"
-scale="0.38 0.38 0.38"
-color="#0D47A1">
-</a-text>
-<a-text
-value="TERMINAL POSITIF (+)"
-position="-0.90 1.25 0"
-align="center"
-scale="0.65 0.65 0.65"
-color="red">
+    value="TERMINAL\nPOSITIF (+)"
+    position="-1.10 1.02 0.02"
+    align="center"
+    width="1.65"
+    color="#D50000">
 </a-text>
 
+
+<!-- ========================= -->
+<!-- LABEL TERMINAL NEGATIF -->
+<!-- ========================= -->
+
+<a-plane
+    position="1.10 0.42 -0.08"
+    width="1.05"
+    height="0.38"
+    color="#ECEFF1"
+    opacity="0.95">
+</a-plane>
+
 <a-text
-value="TERMINAL NEGATIF (-)"
-position="-0.90 -0.45 0"
-align="center"
-scale="0.65 0.65 0.65"
-color="black">
+    value="TERMINAL\nNEGATIF (-)"
+    position="1.10 0.42 0.02"
+    align="center"
+    width="1.65"
+    color="#212121">
 </a-text>
 
 
@@ -137,104 +230,132 @@ color="black">
 <!-- ========================= -->
 
 <a-cylinder
-position="0.00 0.35 0"
-rotation="0 0 90"
-radius="0.05"
-height="1.50"
-color="#1565c0">
+    position="0 -0.10 0"
+    radius="0.05"
+    height="1.50"
+    color="#1565c0">
 </a-cylinder>
 
 
 <!-- ========================= -->
-<!-- ARUS -->
+<!-- ANIMASI ARUS -->
 <!-- ========================= -->
 
 <a-sphere
-radius="0.06"
-color="#00ff00"
-position="-0.45 0.35 0"
+    radius="0.06"
+    color="#00FF00"
+    position="0 0.20 0.08"
 
-animation="
-property: position;
-from: -0.45 0.35 0;
-to: 0.55 0.35 0;
-dur: 1500;
-dir: alternate;
-loop: true;
-easing: linear;">
+    animation="
+    property: position;
+    from: 0 0.20 0.08;
+    to: 0 -0.50 0.08;
+    dur: 1500;
+    dir: alternate;
+    loop: true;
+    easing: linear;">
 </a-sphere>
 
-<a-text
-value="ARUS ELEKTRIK (I)"
-position="0.00 0.85 0"
-align="center"
-scale="0.8 0.8 0.8"
-color="green">
-</a-text>
+
+<!-- ========================= -->
+<!-- PANEL ARUS ELEKTRIK -->
+<!-- ========================= -->
+
 <a-plane
-position="0 0.20 -0.02"
-width="1.8"
-height="0.45"
-color="#E8F5E9"
-opacity="0.9">
+    position="-1.15 -0.18 -0.08"
+    width="1.35"
+    height="0.70"
+    color="#E8F5E9"
+    opacity="0.95">
 </a-plane>
 
 <a-text
-value="Arus mengalir\napabila litar lengkap."
-position="0 0.20 0"
-align="center"
-scale="0.38 0.38 0.38"
-color="#1B5E20">
+    value="ARUS ELEKTRIK (I)"
+    position="-1.15 0.02 0.02"
+    align="center"
+    width="1.95"
+    color="#1B5E20">
 </a-text>
+
+<a-text
+    value="Arus mengalir\napabila litar lengkap."
+    position="-1.15 -0.27 0.02"
+    align="center"
+    width="1.70"
+    color="#1B5E20">
+</a-text>
+
 
 <!-- ========================= -->
 <!-- PERINTANG -->
 <!-- ========================= -->
 
 <a-box
-position="0.80 0.35 0"
-width="0.45"
-height="0.25"
-depth="0.25"
-color="#D2691E">
+    position="0 -1.00 0"
+    width="0.45"
+    height="0.25"
+    depth="0.25"
+    color="#D2691E">
 </a-box>
 
+
+<!-- ========================= -->
+<!-- TAJUK RINTANGAN -->
+<!-- ========================= -->
+
 <a-text
-value="RINTANGAN (R)"
-position="0.80 1.05 0"
-align="center"
-scale="0.8 0.8 0.8"
-color="orange">
+    value="RINTANGAN (R)"
+    position="0 -1.40 0.02"
+    align="center"
+    width="3.00"
+    color="#E65100">
 </a-text>
+
+
+<!-- ========================= -->
+<!-- PANEL PENERANGAN RINTANGAN -->
+<!-- ========================= -->
+
 <a-plane
-position="1.20 0.75 -0.02"
-width="1.6"
-height="0.45"
-color="#FFF3E0"
-opacity="0.9">
+    position="0 -1.76 -0.08"
+    width="1.75"
+    height="0.38"
+    color="#FFF3E0"
+    opacity="0.95">
 </a-plane>
 
 <a-text
-value="Mengurangkan\naliran arus."
-position="1.20 0.75 0"
-align="center"
-scale="0.38 0.38 0.38"
-color="#E65100">
+    value="Mengurangkan aliran arus."
+    position="0 -1.76 0.02"
+    align="center"
+    width="2.10"
+    color="#E65100">
 </a-text>
 
+
 <!-- ========================= -->
-<!-- FORMULA -->
+<!-- RUMUSAN -->
 <!-- ========================= -->
+
+<a-plane
+    position="0 -2.25 -0.08"
+    width="2.80"
+    height="0.50"
+    color="#E3F2FD"
+    opacity="0.95">
+</a-plane>
 
 <a-text
-value="HUKUM OHM\nV = I x R"
-position="0 2.05 0"
-align="center"
-scale="1.2 1.2 1.2"
-color="green">
+    value="Semakin besar rintangan,\nsemakin kecil arus."
+    position="0 -2.25 0.02"
+    align="center"
+    width="2.80"
+    color="#0D47A1">
 </a-text>
 
+
 </a-entity>
+
 </a-marker>
 
 
