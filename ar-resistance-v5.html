@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KVB VoltAR - Kerintangan Version 5.4</title>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<style>
+body{margin:0;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#000;-webkit-tap-highlight-color:transparent}
+#backButton{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;z-index:5000;padding:10px 14px;background:rgba(13,71,161,.92);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,.28);font-size:14px;font-weight:bold;cursor:pointer;backdrop-filter:blur(5px)}
+#welcomeBox{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:6000;width:min(88%,390px);max-height:88vh;overflow-y:auto;padding:24px 22px 22px;box-sizing:border-box;background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(245,249,255,.98));color:#263238;border:1px solid rgba(21,101,192,.14);border-radius:20px;box-shadow:0 10px 34px rgba(0,0,0,.42);text-align:center;animation:welcomeIn .45s ease-out}
+#welcomeBox h2{margin:0 0 8px;color:#0D47A1;font-size:25px}
+#welcomeBox p{margin:0 0 16px;line-height:1.5;color:#455A64;font-size:15px}
+.tutorialStep{display:flex;align-items:center;margin:9px 0;padding:10px;background:#E3F2FD;border-radius:11px;text-align:left}
+.stepNumber{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:34px;height:34px;margin-right:12px;background:#1565c0;color:#fff;border-radius:50%;font-weight:bold}
+#welcomeBox button{margin-top:14px;padding:11px 30px;background:#1565c0;color:#fff;border:none;border-radius:9px;font-size:16px;font-weight:bold;cursor:pointer}
+#guidePanel{display:none;position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5500;width:min(94%,460px);max-height:48vh;overflow-y:auto;box-sizing:border-box;padding:16px 17px 15px;background:rgba(255,255,255,.94);color:#263238;border:1px solid rgba(255,255,255,.7);border-radius:18px;box-shadow:0 8px 28px rgba(0,0,0,.38);backdrop-filter:blur(8px)}
+#guidePanel.panelIn{animation:panelIn .28s ease-out}
+#guideTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+#stepLabel{font-size:13px;font-weight:bold;color:#607D8B}
+#progressDots{display:flex;gap:7px}.progressDot{width:9px;height:9px;border-radius:50%;background:#CFD8DC;border:1px solid #90A4AE}.progressDot.active{background:#1565c0;border-color:#1565c0;transform:scale(1.15)}
+#guideTitle{margin:0 0 7px;color:#0D47A1;font-size:20px;line-height:1.25}
+#guideText{margin:0;font-size:15px;line-height:1.52;color:#37474F}
+#formulaBox{display:none;margin-top:11px;padding:11px;background:linear-gradient(135deg,#E8F5E9,#F1F8E9);color:#1B5E20;border:1px solid #C8E6C9;border-radius:12px;font-size:22px;font-weight:bold;text-align:center}
+#reflectionBox{display:none;margin-top:12px;padding:12px;background:#FFF8E1;border-radius:10px;color:#5D4037}
+#reflectionQuestion{margin:0 0 10px;font-size:15px;font-weight:bold;line-height:1.4}
+.answerButton{display:block;width:100%;margin:7px 0;padding:10px;border:none;border-radius:8px;background:#ECEFF1;color:#263238;font-size:14px;cursor:pointer}
+#reflectionFeedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-size:14px;line-height:1.4;font-weight:bold}
+#guideControls{display:flex;gap:10px;margin-top:13px}.guideButton{flex:1;min-height:42px;padding:10px 12px;border:none;border-radius:9px;font-size:14px;font-weight:bold;cursor:pointer}#prevButton{background:#ECEFF1;color:#37474F}#nextButton{background:#1565c0;color:#fff}
+#reopenGuide{display:none;position:fixed;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:5200;padding:11px 15px;background:rgba(13,71,161,.93);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.3);font-size:14px;font-weight:bold;cursor:pointer;backdrop-filter:blur(5px)}
+@keyframes welcomeIn{from{opacity:0;transform:translate(-50%,-46%) scale(.97)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes panelIn{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(max-width:480px){#welcomeBox{width:90%;padding:21px 18px 19px}#guidePanel{width:94%;max-height:49vh;padding:14px}#guideTitle{font-size:18px}#guideText,#reflectionQuestion{font-size:14px}}
+</style>
+</head>
+<body>
+<button id="backButton" onclick="window.location.href='resistance.html'">← Kembali</button>
+<div id="welcomeBox">
+<h2>🧪 KVB VoltAR Kerintangan 5.4</h2>
+<p>Teroka faktor yang mempengaruhi kerintangan sebuah konduktor.</p>
+<div class="tutorialStep"><div class="stepNumber">1</div><div>Imbas marker Hiro.</div></div>
+<div class="tutorialStep"><div class="stepNumber">2</div><div>Perhatikan model dawai serta simbol L, A, RHO dan suhu.</div></div>
+<div class="tutorialStep"><div class="stepNumber">3</div><div>Ikuti panduan lima langkah di bahagian bawah.</div></div>
+<button onclick="mulaPembelajaran()">Mula Imbas</button>
+</div>
+<div id="guidePanel">
+<div id="guideTop"><div id="stepLabel">Langkah 1 / 5</div><div id="progressDots"><span class="progressDot active"></span><span class="progressDot"></span><span class="progressDot"></span><span class="progressDot"></span><span class="progressDot"></span></div></div>
+<h3 id="guideTitle">🟤 KERINTANGAN</h3>
+<p id="guideText">Kerintangan ialah halangan terhadap aliran arus elektrik dalam sesuatu bahan.</p>
+<div id="formulaBox">R = RHO × L ÷ A</div>
+<div id="reflectionBox">
+<p id="reflectionQuestion">Jika panjang dawai digandakan tetapi bahan dan luas keratan rentas kekal, apakah yang berlaku kepada kerintangan?</p>
+<button class="answerButton" onclick="semakJawapan('A')">A. Kerintangan berkurang</button>
+<button class="answerButton" onclick="semakJawapan('B')">B. Kerintangan bertambah</button>
+<button class="answerButton" onclick="semakJawapan('C')">C. Kerintangan tidak berubah</button>
+<div id="reflectionFeedback"></div>
+</div>
+<div id="guideControls"><button id="prevButton" class="guideButton" onclick="langkahSebelum()">⬅ Sebelum</button><button id="nextButton" class="guideButton" onclick="langkahSeterusnya()">Seterusnya ➡</button></div>
+</div>
+<button id="reopenGuide" onclick="bukaSemulaPanduan()">Buka Panduan</button>
+<a-scene embedded vr-mode-ui="enabled:false" arjs="sourceType:webcam; debugUIEnabled:false;">
+<a-marker preset="hiro">
+
+<a-entity
+    id="resistanceScene"
+    scale="0.46 0.46 0.46"
+    position="0 0.16 0">
+
+    <!-- Model konduktor utama -->
+    <a-entity id="wireModel">
+
+        <!-- Badan dawai -->
+        <a-cylinder
+            id="mainWire"
+            position="0 0.18 0"
+            rotation="0 0 90"
+            radius="0.16"
+            height="2.05"
+            color="#B87333">
+        </a-cylinder>
+
+        <!-- Hujung kiri -->
+        <a-circle
+            position="-1.025 0.18 0"
+            rotation="0 90 0"
+            radius="0.16"
+            color="#8D4E20"
+            material="side:double;">
+        </a-circle>
+
+        <!-- Muka keratan rentas kanan -->
+        <a-circle
+            id="areaFace"
+            position="1.025 0.18 0"
+            rotation="0 90 0"
+            radius="0.16"
+            color="#43A047"
+            opacity="0.98"
+            material="side:double;">
+        </a-circle>
+
+        <!-- Simbol jenis bahan -->
+        <a-text
+            id="materialLabel"
+            value="RHO"
+            position="0 0.58 0.045"
+            align="center"
+            width="3.10"
+            color="#6A1B9A">
+        </a-text>
+
+        <!-- Penunjuk panjang -->
+        <a-text
+            id="lengthLabel"
+            value="<------ L ------>"
+            position="0 -0.18 0.045"
+            align="center"
+            width="4.20"
+            color="#0D47A1">
+        </a-text>
+
+        <!-- Penunjuk luas -->
+        <a-text
+            id="areaLabel"
+            value="A"
+            position="1.10 0.18 0.045"
+            align="center"
+            width="2.55"
+            color="#1B5E20">
+        </a-text>
+
+        <!-- Penunjuk suhu -->
+        <a-text
+            id="temperatureLabel"
+            value="SUHU"
+            position="0 -0.58 0.045"
+            align="center"
+            width="2.85"
+            color="#C62828">
+        </a-text>
+
+    </a-entity>
+
+</a-entity>
+
+</a-marker>
+<a-entity camera></a-entity>
+</a-scene>
+<script>
+const langkahPanduan=[
+{tajuk:"🟤 KERINTANGAN",teks:"Kerintangan ialah halangan terhadap aliran arus elektrik. Nilainya bergantung pada ciri fizikal dan bahan konduktor.",formula:false,sorotan:"kerintangan"},
+{tajuk:"📏 PANJANG DAWAI (L)",teks:"Semakin panjang dawai, semakin besar kerintangan kerana elektron menempuh laluan yang lebih jauh.",formula:false,sorotan:"panjang"},
+{tajuk:"📐 LUAS KERATAN RENTAS (A)",teks:"Semakin besar luas keratan rentas, semakin kecil kerintangan kerana lebih banyak laluan tersedia untuk aliran cas.",formula:false,sorotan:"luas"},
+{tajuk:"🧪 JENIS BAHAN (ρ)",teks:"Setiap bahan mempunyai kerintangan tentu yang berbeza. Dalam modul ini, RHO mewakili kerintangan tentu bahan.",formula:false,sorotan:"bahan"},
+{tajuk:"🌡️ SUHU DAN RUMUS",teks:"Bagi kebanyakan logam, peningkatan suhu meningkatkan kerintangan. Bagi dawai pada suhu tetap, hubungan utama ialah R = RHO × L ÷ A.",formula:true,sorotan:"suhu"}
+];
+let indeksLangkah=0;
+function mulaPembelajaran(){document.getElementById("welcomeBox").style.display="none";document.getElementById("guidePanel").style.display="block";document.getElementById("reopenGuide").style.display="none";document.getElementById("nextButton").style.display="block";document.getElementById("prevButton").style.display="block";document.getElementById("reflectionBox").style.display="none";document.getElementById("reflectionFeedback").style.display="none";indeksLangkah=0;paparkanLangkah()}
+function paparkanLangkah(){const data=langkahPanduan[indeksLangkah];const panel=document.getElementById("guidePanel");panel.classList.remove("panelIn");void panel.offsetWidth;panel.classList.add("panelIn");document.getElementById("reflectionBox").style.display="none";document.getElementById("reflectionFeedback").style.display="none";document.getElementById("stepLabel").textContent="Langkah "+(indeksLangkah+1)+" / "+langkahPanduan.length;document.getElementById("guideTitle").textContent=data.tajuk;document.getElementById("guideText").textContent=data.teks;document.getElementById("formulaBox").style.display=data.formula?"block":"none";document.querySelectorAll(".progressDot").forEach((dot,index)=>dot.classList.toggle("active",index===indeksLangkah));const prev=document.getElementById("prevButton");prev.disabled=indeksLangkah===0;prev.style.opacity=indeksLangkah===0?"0.45":"1";document.getElementById("nextButton").textContent=indeksLangkah===langkahPanduan.length-1?"Selesai ✓":"Seterusnya ➡";kemasKiniSorotan(data.sorotan)}
+function kemasKiniSorotan(jenis){const scene=document.getElementById("resistanceScene"),wire=document.getElementById("mainWire"),area=document.getElementById("areaFace"),lengthLabel=document.getElementById("lengthLabel"),areaLabel=document.getElementById("areaLabel"),materialLabel=document.getElementById("materialLabel"),temperatureLabel=document.getElementById("temperatureLabel");scene.removeAttribute("animation__highlight");wire.removeAttribute("animation__highlight");area.removeAttribute("animation__highlight");lengthLabel.removeAttribute("animation__highlight");areaLabel.removeAttribute("animation__highlight");materialLabel.removeAttribute("animation__highlight");temperatureLabel.removeAttribute("animation__highlight");scene.setAttribute("scale","0.46 0.46 0.46");wire.setAttribute("scale","1 1 1");area.setAttribute("scale","1 1 1");wire.setAttribute("color","#B87333");if(jenis==="kerintangan"){scene.setAttribute("animation__highlight","property:scale; from:0.46 0.46 0.46; to:0.48 0.48 0.48; dur:850; dir:alternate; loop:true; easing:easeInOutSine");wire.setAttribute("animation__highlight","property:material.color; from:#B87333; to:#E09A4B; dur:700; dir:alternate; loop:true; easing:easeInOutSine")}if(jenis==="panjang"){lengthLabel.setAttribute("animation__highlight","property:scale; from:1 1 1; to:1.32 1.32 1.32; dur:620; dir:alternate; loop:true; easing:easeInOutSine");wire.setAttribute("animation__highlight","property:scale; from:1 1 1; to:1.08 1 1; dur:750; dir:alternate; loop:true; easing:easeInOutSine")}if(jenis==="luas"){area.setAttribute("animation__highlight","property:scale; from:1 1 1; to:1.60 1.60 1.60; dur:620; dir:alternate; loop:true; easing:easeInOutSine");areaLabel.setAttribute("animation__highlight","property:scale; from:1 1 1; to:1.42 1.42 1.42; dur:620; dir:alternate; loop:true; easing:easeInOutSine")}if(jenis==="bahan"){materialLabel.setAttribute("animation__highlight","property:scale; from:1 1 1; to:1.46 1.46 1.46; dur:620; dir:alternate; loop:true; easing:easeInOutSine");wire.setAttribute("animation__highlight","property:material.color; from:#B87333; to:#8E24AA; dur:750; dir:alternate; loop:true; easing:easeInOutSine")}if(jenis==="suhu"){temperatureLabel.setAttribute("animation__highlight","property:scale; from:1 1 1; to:1.46 1.46 1.46; dur:620; dir:alternate; loop:true; easing:easeInOutSine");wire.setAttribute("animation__highlight","property:material.color; from:#B87333; to:#E53935; dur:700; dir:alternate; loop:true; easing:easeInOutSine")}}
+function langkahSeterusnya(){if(indeksLangkah<langkahPanduan.length-1){indeksLangkah++;paparkanLangkah()}else{paparkanRefleksi()}}
+function langkahSebelum(){if(indeksLangkah>0){indeksLangkah--;paparkanLangkah()}}
+function paparkanRefleksi(){const panel=document.getElementById("guidePanel");panel.classList.remove("panelIn");void panel.offsetWidth;panel.classList.add("panelIn");document.getElementById("guideTitle").textContent="✅ SEMAK KEFAHAMAN";document.getElementById("guideText").textContent="Jawab soalan ringkas ini berdasarkan faktor kerintangan.";document.getElementById("formulaBox").style.display="block";document.getElementById("reflectionBox").style.display="block";document.getElementById("nextButton").style.display="none";document.getElementById("prevButton").style.display="none";document.getElementById("stepLabel").textContent="Refleksi Akhir";document.querySelectorAll(".progressDot").forEach(dot=>dot.classList.add("active"));kemasKiniSorotan("kerintangan")}
+function semakJawapan(jawapan){const feedback=document.getElementById("reflectionFeedback");if(jawapan==="B"){feedback.style.display="block";feedback.style.background="#E8F5E9";feedback.style.color="#1B5E20";feedback.textContent="Betul! Apabila panjang dawai bertambah dan faktor lain kekal, kerintangan turut bertambah.";setTimeout(()=>feedback.textContent="Tahniah! Anda telah melengkapkan penerokaan faktor kerintangan.",1600);setTimeout(()=>tutupPanduan(),3400)}else{feedback.style.display="block";feedback.style.background="#FFEBEE";feedback.style.color="#B71C1C";feedback.textContent="Belum tepat. Rujuk hubungan R = RHO × L ÷ A dan cuba sekali lagi."}}
+function tutupPanduan(){document.getElementById("guidePanel").style.display="none";document.getElementById("reopenGuide").style.display="block";kemasKiniSorotan("formula")}
+function bukaSemulaPanduan(){document.getElementById("reopenGuide").style.display="none";document.getElementById("guidePanel").style.display="block";document.getElementById("nextButton").style.display="block";document.getElementById("prevButton").style.display="block";document.getElementById("reflectionBox").style.display="none";document.getElementById("reflectionFeedback").style.display="none";indeksLangkah=0;paparkanLangkah()}
+</script>
+</body>
+</html>
