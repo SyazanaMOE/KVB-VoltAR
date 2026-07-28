@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KVB VoltAR Version 4.6</title>
+
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#000;
+    -webkit-tap-highlight-color:transparent;
+}
+
+#backButton{
+    position:fixed;
+    top:max(12px,env(safe-area-inset-top));
+    left:12px;
+    z-index:5000;
+    padding:10px 14px;
+    background:rgba(13,71,161,.92);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:12px;
+    box-shadow:0 3px 12px rgba(0,0,0,.28);
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    backdrop-filter:blur(5px);
+}
+
+#welcomeBox{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:6000;
+    width:min(88%,390px);
+    max-height:88vh;
+    overflow-y:auto;
+    padding:24px 22px 22px;
+    box-sizing:border-box;
+    background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(245,249,255,.98));
+    color:#263238;
+    border:1px solid rgba(21,101,192,.14);
+    border-radius:20px;
+    box-shadow:0 10px 34px rgba(0,0,0,.42);
+    text-align:center;
+    animation:welcomeIn .45s ease-out;
+}
+
+#welcomeBox h2{
+    margin:0 0 8px;
+    color:#0D47A1;
+    font-size:25px;
+    letter-spacing:.2px;
+}
+
+#welcomeBox p{
+    margin:0 0 16px;
+    line-height:1.5;
+    color:#455A64;
+    font-size:15px;
+}
+
+.tutorialStep{
+    display:flex;
+    align-items:center;
+    margin:10px 0;
+    padding:10px;
+    background:#E3F2FD;
+    border-radius:10px;
+    text-align:left;
+}
+
+.stepNumber{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    width:34px;
+    height:34px;
+    margin-right:12px;
+    background:#1565c0;
+    color:#fff;
+    border-radius:50%;
+    font-weight:bold;
+}
+
+#welcomeBox button{
+    margin-top:14px;
+    padding:11px 30px;
+    background:#1565c0;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#guidePanel{
+    display:none;
+    position:fixed;
+    left:50%;
+    bottom:max(12px,env(safe-area-inset-bottom));
+    transform:translateX(-50%);
+    z-index:5500;
+    width:min(94%,460px);
+    max-height:46vh;
+    overflow-y:auto;
+    box-sizing:border-box;
+    padding:16px 17px 15px;
+    background:rgba(255,255,255,.94);
+    color:#263238;
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:18px;
+    box-shadow:0 8px 28px rgba(0,0,0,.38);
+    backdrop-filter:blur(8px);
+}
+
+#guidePanel.panelIn{
+    animation:panelIn .28s ease-out;
+}
+
+#guideTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:8px;
+}
+
+#stepLabel{
+    font-size:13px;
+    font-weight:bold;
+    color:#607D8B;
+}
+
+#progressDots{
+    display:flex;
+    gap:7px;
+}
+
+.progressDot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#CFD8DC;
+    border:1px solid #90A4AE;
+}
+
+.progressDot.active{
+    background:#1565c0;
+    border-color:#1565c0;
+    transform:scale(1.15);
+}
+
+#guideTitle{
+    margin:0 0 7px;
+    color:#0D47A1;
+    font-size:20px;
+    line-height:1.25;
+}
+
+#guideText{
+    margin:0;
+    font-size:15px;
+    line-height:1.52;
+    color:#37474F;
+}
+
+#formulaBox{
+    display:none;
+    margin-top:11px;
+    padding:11px;
+    background:linear-gradient(135deg,#E8F5E9,#F1F8E9);
+    color:#1B5E20;
+    border:1px solid #C8E6C9;
+    border-radius:12px;
+    font-size:23px;
+    font-weight:bold;
+    text-align:center;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
+}
+
+
+#reflectionBox{
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    background:#FFF8E1;
+    border-radius:10px;
+    color:#5D4037;
+}
+
+#reflectionQuestion{
+    margin:0 0 10px;
+    font-size:15px;
+    font-weight:bold;
+    line-height:1.4;
+}
+
+.answerButton{
+    display:block;
+    width:100%;
+    margin:7px 0;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:#ECEFF1;
+    color:#263238;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.answerButton:hover{
+    background:#CFD8DC;
+}
+
+#reflectionFeedback{
+    display:none;
+    margin-top:10px;
+    padding:10px;
+    border-radius:8px;
+    font-size:14px;
+    line-height:1.4;
+    font-weight:bold;
+}
+
+#guideControls{
+    display:flex;
+    gap:10px;
+    margin-top:13px;
+}
+
+.guideButton{
+    flex:1;
+    padding:10px 12px;
+    border:none;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#prevButton{
+    background:#ECEFF1;
+    color:#37474F;
+}
+
+#nextButton{
+    background:#1565c0;
+    color:#fff;
+}
+
+#reopenGuide{
+    display:none;
+    position:fixed;
+    right:12px;
+    bottom:max(12px,env(safe-area-inset-bottom));
+    z-index:5200;
+    padding:11px 15px;
+    background:rgba(13,71,161,.93);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:12px;
+    box-shadow:0 4px 14px rgba(0,0,0,.3);
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    backdrop-filter:blur(5px);
+}
+
+@keyframes welcomeIn{
+    from{opacity:0; transform:translate(-50%,-46%) scale(.97);}
+    to{opacity:1; transform:translate(-50%,-50%) scale(1);}
+}
+
+@keyframes panelIn{
+    from{opacity:0; transform:translateX(-50%) translateY(14px);}
+    to{opacity:1; transform:translateX(-50%) translateY(0);}
+}
+
+@media (max-width:480px){
+    #welcomeBox{
+        width:90%;
+        padding:21px 18px 19px;
+    }
+
+    .tutorialStep{
+        margin:8px 0;
+        padding:9px;
+    }
+
+    #guidePanel{
+        width:94%;
+        max-height:48vh;
+        padding:14px 14px 13px;
+    }
+
+    #guideTitle{
+        font-size:18px;
+    }
+
+    #guideText,
+    #reflectionQuestion{
+        font-size:14px;
+    }
+
+    .answerButton,
+    .guideButton{
+        min-height:42px;
+    }
+}
+/* ================================================= */
+/* KVB VOLTAR POLISH — BLUE ENERGY THEME              */
+/* ================================================= */
+
+:root{
+    --kvb-blue-dark:#0D47A1;
+    --kvb-blue:#1565C0;
+    --kvb-blue-light:#E3F2FD;
+    --kvb-green:#2E7D32;
+    --kvb-orange:#EF6C00;
+    --kvb-text:#263238;
+    --kvb-muted:#607D8B;
+    --kvb-white:rgba(255,255,255,.96);
+}
+
+/* Latar asas aplikasi */
+
+body{
+    background:#000;
+    color:var(--kvb-text);
+}
+
+/* Butang kembali */
+
+#backButton{
+    top:max(12px,env(safe-area-inset-top));
+    left:12px;
+
+    padding:11px 16px;
+
+    background:linear-gradient(
+        135deg,
+        var(--kvb-blue-dark),
+        var(--kvb-blue)
+    );
+
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:14px;
+
+    box-shadow:
+        0 5px 16px rgba(0,0,0,.32),
+        inset 0 1px 0 rgba(255,255,255,.18);
+
+    font-size:14px;
+    font-weight:700;
+
+    backdrop-filter:blur(7px);
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+#backButton:active{
+    transform:scale(.96);
+    box-shadow:0 3px 9px rgba(0,0,0,.28);
+}
+
+/* Skrin pengenalan */
+
+#welcomeBox{
+    width:min(90%,400px);
+
+    padding:25px 22px 22px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.99),
+            rgba(235,245,255,.98)
+        );
+
+    border:1px solid rgba(21,101,192,.22);
+    border-radius:24px;
+
+    box-shadow:
+        0 18px 48px rgba(0,0,0,.46),
+        inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+#welcomeBox h2{
+    margin-bottom:9px;
+
+    color:var(--kvb-blue-dark);
+
+    font-size:25px;
+    font-weight:800;
+    letter-spacing:.3px;
+}
+
+#welcomeBox p{
+    color:#455A64;
+    font-size:15px;
+    line-height:1.55;
+}
+
+/* Langkah tutorial */
+
+.tutorialStep{
+    margin:9px 0;
+    padding:11px;
+
+    background:linear-gradient(
+        135deg,
+        #E3F2FD,
+        #F4F9FF
+    );
+
+    border:1px solid rgba(21,101,192,.10);
+    border-radius:13px;
+
+    box-shadow:0 2px 7px rgba(13,71,161,.07);
+}
+
+.stepNumber{
+    width:36px;
+    height:36px;
+
+    background:linear-gradient(
+        135deg,
+        var(--kvb-blue-dark),
+        var(--kvb-blue)
+    );
+
+    box-shadow:0 3px 8px rgba(13,71,161,.26);
+}
+
+/* Butang Mula Imbas */
+
+#welcomeBox button{
+    min-width:170px;
+    min-height:45px;
+
+    margin-top:16px;
+    padding:12px 28px;
+
+    background:linear-gradient(
+        135deg,
+        var(--kvb-blue-dark),
+        var(--kvb-blue)
+    );
+
+    border-radius:12px;
+
+    box-shadow:
+        0 6px 15px rgba(13,71,161,.28),
+        inset 0 1px 0 rgba(255,255,255,.2);
+
+    font-size:16px;
+    letter-spacing:.2px;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+#welcomeBox button:active{
+    transform:scale(.97);
+    box-shadow:0 3px 8px rgba(13,71,161,.24);
+}
+
+/* Panel pembelajaran */
+
+#guidePanel{
+    width:min(94%,470px);
+
+    padding:17px 18px 16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.97),
+            rgba(242,248,255,.95)
+        );
+
+    border:1px solid rgba(255,255,255,.78);
+    border-radius:22px;
+
+    box-shadow:
+        0 12px 38px rgba(0,0,0,.40),
+        inset 0 1px 0 rgba(255,255,255,.92);
+
+    backdrop-filter:blur(10px);
+}
+
+/* Label langkah */
+
+#stepLabel{
+    color:var(--kvb-muted);
+    font-size:12px;
+    letter-spacing:.35px;
+    text-transform:uppercase;
+}
+
+/* Titik kemajuan */
+
+.progressDot{
+    width:10px;
+    height:10px;
+
+    background:#CFD8DC;
+    border:1px solid #90A4AE;
+
+    transition:
+        transform .2s ease,
+        background .2s ease;
+}
+
+.progressDot.active{
+    background:var(--kvb-blue);
+    border-color:var(--kvb-blue);
+
+    transform:scale(1.22);
+
+    box-shadow:0 0 0 3px rgba(21,101,192,.13);
+}
+
+/* Tajuk panduan */
+
+#guideTitle{
+    margin-top:2px;
+    margin-bottom:8px;
+
+    color:var(--kvb-blue-dark);
+
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:.15px;
+}
+
+/* Teks penerangan */
+
+#guideText{
+    color:#37474F;
+    font-size:15px;
+    line-height:1.58;
+}
+
+/* Kotak formula */
+
+#formulaBox{
+    margin-top:13px;
+    padding:13px;
+
+    background:linear-gradient(
+        135deg,
+        #E8F5E9,
+        #F4FBF4
+    );
+
+    color:var(--kvb-green);
+
+    border:1px solid #C8E6C9;
+    border-left:5px solid var(--kvb-green);
+    border-radius:14px;
+
+    box-shadow:
+        0 3px 10px rgba(46,125,50,.10),
+        inset 0 1px 0 rgba(255,255,255,.8);
+
+    font-size:24px;
+    letter-spacing:.5px;
+}
+
+/* Kotak refleksi */
+
+#reflectionBox{
+    margin-top:13px;
+    padding:13px;
+
+    background:linear-gradient(
+        135deg,
+        #FFF8E1,
+        #FFFDF7
+    );
+
+    border:1px solid #FFE0B2;
+    border-left:5px solid var(--kvb-orange);
+    border-radius:14px;
+
+    box-shadow:0 3px 10px rgba(239,108,0,.08);
+}
+
+/* Butang jawapan */
+
+.answerButton{
+    min-height:43px;
+
+    margin:8px 0;
+    padding:11px 12px;
+
+    background:#F2F5F7;
+    color:var(--kvb-text);
+
+    border:1px solid #DCE3E7;
+    border-radius:11px;
+
+    font-weight:600;
+    text-align:left;
+
+    transition:
+        background .18s ease,
+        transform .18s ease,
+        border-color .18s ease;
+}
+
+.answerButton:hover{
+    background:#E3F2FD;
+    border-color:#90CAF9;
+}
+
+.answerButton:active{
+    transform:scale(.985);
+}
+
+/* Maklum balas refleksi */
+
+#reflectionFeedback{
+    border-radius:11px;
+    animation:feedbackPop .25s ease-out;
+}
+
+/* Kawalan panduan */
+
+#guideControls{
+    gap:11px;
+    margin-top:15px;
+}
+
+.guideButton{
+    min-height:43px;
+
+    border-radius:11px;
+
+    font-size:14px;
+    font-weight:700;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.guideButton:active{
+    transform:scale(.97);
+}
+
+#prevButton{
+    background:#ECEFF1;
+    color:#455A64;
+
+    border:1px solid #CFD8DC;
+}
+
+#nextButton{
+    background:linear-gradient(
+        135deg,
+        var(--kvb-blue-dark),
+        var(--kvb-blue)
+    );
+
+    box-shadow:0 4px 12px rgba(13,71,161,.24);
+}
+
+/* Butang buka semula panduan */
+
+#reopenGuide{
+    right:12px;
+    bottom:max(12px,env(safe-area-inset-bottom));
+
+    padding:11px 16px;
+
+    background:linear-gradient(
+        135deg,
+        var(--kvb-blue-dark),
+        var(--kvb-blue)
+    );
+
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:14px;
+
+    box-shadow:0 5px 16px rgba(0,0,0,.30);
+
+    backdrop-filter:blur(7px);
+}
+
+/* Animasi maklum balas */
+
+@keyframes feedbackPop{
+    from{
+        opacity:0;
+        transform:scale(.96);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+/* Paparan telefon */
+
+@media (max-width:480px){
+
+    #welcomeBox{
+        width:91%;
+        padding:22px 18px 20px;
+        border-radius:21px;
+    }
+
+    #welcomeBox h2{
+        font-size:23px;
+    }
+
+    #guidePanel{
+        width:94%;
+        padding:15px;
+        border-radius:20px;
+    }
+
+    #guideTitle{
+        font-size:19px;
+    }
+
+    #formulaBox{
+        font-size:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<button id="backButton" onclick="window.location.href='ohm.html'">← Kembali</button>
+
+<div id="welcomeBox">
+    <h2>⚡ KVB VoltAR 4.6</h2>
+    <p>Teroka satu litar lengkap dan lihat komponen penting diserlahkan pada setiap langkah.</p>
+
+    <div class="tutorialStep">
+        <div class="stepNumber">1</div>
+        <div>Imbas marker Hiro.</div>
+    </div>
+
+    <div class="tutorialStep">
+        <div class="stepNumber">2</div>
+        <div>Perhatikan bateri, wayar dan perintang yang bersambung.</div>
+    </div>
+
+    <div class="tutorialStep">
+        <div class="stepNumber">3</div>
+        <div>Ikuti panel panduan di bahagian bawah.</div>
+    </div>
+
+    <button onclick="mulaPembelajaran()">Mula Imbas</button>
+</div>
+
+<div id="guidePanel">
+    <div id="guideTop">
+        <div id="stepLabel">Langkah 1 / 5</div>
+
+        <div id="progressDots">
+            <span class="progressDot active"></span>
+            <span class="progressDot"></span>
+            <span class="progressDot"></span>
+            <span class="progressDot"></span>
+            <span class="progressDot"></span>
+        </div>
+    </div>
+
+    <h3 id="guideTitle">🔋 LITAR LENGKAP</h3>
+
+    <p id="guideText">
+        Bateri, wayar dan perintang disambungkan dalam satu gelung tertutup.
+    </p>
+
+    <div id="formulaBox">V = I × R</div>
+
+
+    <div id="reflectionBox">
+        <p id="reflectionQuestion">
+            Jika nilai rintangan meningkat tetapi voltan kekal, apakah yang berlaku kepada arus?
+        </p>
+
+        <button class="answerButton" onclick="semakJawapan('A')">
+            A. Arus meningkat
+        </button>
+
+        <button class="answerButton" onclick="semakJawapan('B')">
+            B. Arus berkurang
+        </button>
+
+        <button class="answerButton" onclick="semakJawapan('C')">
+            C. Arus tidak berubah
+        </button>
+
+        <div id="reflectionFeedback"></div>
+    </div>
+
+    <div id="guideControls">
+        <button id="prevButton"
+                class="guideButton"
+                onclick="langkahSebelum()">
+            ⬅ Sebelum
+        </button>
+
+        <button id="nextButton"
+                class="guideButton"
+                onclick="langkahSeterusnya()">
+            Seterusnya ➡
+        </button>
+    </div>
+</div>
+
+<button id="reopenGuide" onclick="bukaSemulaPanduan()">
+    Buka Panduan
+</button>
+
+<a-scene
+embedded
+vr-mode-ui="enabled:false"
+arjs="sourceType:webcam; debugUIEnabled:false;">
+
+<a-assets>
+    <a-asset-item
+        id="batteryModel"
+        src="models/battery.glb">
+    </a-asset-item>
+</a-assets>
+
+<a-marker preset="hiro">
+
+<a-entity
+    id="circuitScene"
+    scale="0.58 0.58 0.58"
+    position="0 0.15 0">
+
+    <!-- ========================= -->
+    <!-- KUMPULAN BATERI -->
+    <!-- ========================= -->
+
+    <a-entity id="batteryGroup" scale="1 1 1">
+
+        <a-entity
+            gltf-model="#batteryModel"
+            position="0 1.05 0"
+            rotation="0 180 90"
+            scale="5.2 5.2 5.2">
+        </a-entity>
+<!-- INDIKATOR KUTUB BATERI -->
+
+<!-- Kutub Negatif (-) -->
+<a-circle
+    position="-0.18 1.05 0.18"
+    radius="0.070"
+    color="#37474F"
+    opacity="0.98">
+</a-circle>
+
+<a-text
+    value="-"
+    position="-0.18 1.05 0.20"
+    align="center"
+    baseline="center"
+    width="0.60"
+    color="#FFFFFF">
+</a-text>s
+
+<!-- Kutub Positif (+) -->
+<a-circle
+    position="0.18 1.05 0.18"
+    radius="0.070"
+    color="#D32F2F"
+    opacity="0.98"
+    stroke="color:#FFFFFF; width:0.012">
+</a-circle>
+
+<a-text
+    value="+"
+    position="0.18 1.05 0.20"
+    align="center"
+    baseline="center"
+    width="0.60"
+    color="#FFFFFF">
+</a-text>
+</a-text>
+        <!-- Cahaya penunjuk bateri -->
+        <a-ring
+            id="batteryHighlight"
+            position="0 1.05 -0.10"
+            rotation="0 0 0"
+            radius-inner="0.48"
+            radius-outer="0.62"
+            color="#FFD54F"
+            opacity="0"
+            material="transparent:true; side:double;">
+        </a-ring>
+
+    </a-entity>
+
+
+    <!-- ========================= -->
+    <!-- KUMPULAN WAYAR + PERINTANG -->
+    <!-- ========================= -->
+
+    <a-entity id="wireGroup" scale="1 1 1">
+
+        <!-- Wayar atas kiri dan kanan -->
+
+        <a-cylinder
+            position="-0.70 1.05 0"
+            rotation="0 0 90"
+            radius="0.045"
+            height="1.10"
+            color="#1565c0">
+        </a-cylinder>
+
+        <a-cylinder
+            position="0.70 1.05 0"
+            rotation="0 0 90"
+            radius="0.045"
+            height="1.10"
+            color="#1565c0">
+        </a-cylinder>
+
+        <!-- Wayar sisi -->
+
+        <a-cylinder
+            position="-1.25 0 0"
+            radius="0.045"
+            height="2.10"
+            color="#1565c0">
+        </a-cylinder>
+
+        <a-cylinder
+            position="1.25 0 0"
+            radius="0.045"
+            height="2.10"
+            color="#1565c0">
+        </a-cylinder>
+
+        <!-- Wayar bawah menuju perintang -->
+
+        <a-cylinder
+            position="-0.90 -1.05 0"
+            rotation="0 0 90"
+            radius="0.045"
+            height="0.70"
+            color="#1565c0">
+        </a-cylinder>
+
+        <a-cylinder
+            position="0.90 -1.05 0"
+            rotation="0 0 90"
+            radius="0.045"
+            height="0.70"
+            color="#1565c0">
+        </a-cylinder>
+
+        <!-- KUMPULAN PERINTANG -->
+
+        <a-entity id="resistorGroup" scale="1 1 1">
+
+        <!-- Kaki perintang -->
+
+        <a-cylinder
+            position="-0.47 -1.05 0"
+            rotation="0 0 90"
+            radius="0.04"
+            height="0.22"
+            color="#B0BEC5">
+        </a-cylinder>
+
+        <a-cylinder
+            position="0.47 -1.05 0"
+            rotation="0 0 90"
+            radius="0.04"
+            height="0.22"
+            color="#B0BEC5">
+        </a-cylinder>
+
+        <!-- Badan perintang -->
+
+        <a-cylinder
+            position="0 -1.05 0"
+            rotation="0 0 90"
+            radius="0.18"
+            height="0.78"
+            color="#D7A35D">
+        </a-cylinder>
+
+        <a-ring
+    id="resistorHighlight"
+    position="0 -1.05 0.14"
+    rotation="0 0 0"
+    radius-inner="0.28"
+    radius-outer="0.37"
+    scale="1.65 1 1"
+    color="#FF9800"
+    opacity="0"
+    material="transparent:true; side:double;">
+</a-ring>
+
+        <!-- Jalur warna perintang -->
+
+        <a-torus
+            position="-0.20 -1.05 0"
+            rotation="0 90 0"
+            radius="0.18"
+            radius-tubular="0.024"
+            color="#795548">
+        </a-torus>
+
+        <a-torus
+            position="-0.06 -1.05 0"
+            rotation="0 90 0"
+            radius="0.18"
+            radius-tubular="0.024"
+            color="#D32F2F">
+        </a-torus>
+
+        <a-torus
+            position="0.08 -1.05 0"
+            rotation="0 90 0"
+            radius="0.18"
+            radius-tubular="0.024"
+            color="#FBC02D">
+        </a-torus>
+
+        </a-entity>
+
+    </a-entity>
+
+
+    <!-- ========================= -->
+    <!-- KUMPULAN ANIMASI ARUS -->
+    <!-- ========================= -->
+
+    <a-entity id="currentGroup" scale="1 1 1">
+
+        <a-sphere
+            radius="0.07"
+            color="#00FF00"
+            animation="property:position;
+                       from:-1.20 0.85 0.09;
+                       to:-1.20 -0.85 0.09;
+                       dur:1800;
+                       loop:true;
+                       easing:linear;">
+        </a-sphere>
+
+        <a-sphere
+            radius="0.07"
+            color="#00FF00"
+            animation="property:position;
+                       from:-0.82 -1.05 0.09;
+                       to:-0.42 -1.05 0.09;
+                       dur:900;
+                       delay:300;
+                       loop:true;
+                       easing:linear;">
+        </a-sphere>
+
+        <a-sphere
+            radius="0.07"
+            color="#00FF00"
+            animation="property:position;
+                       from:-0.30 -1.05 0.21;
+                       to:0.30 -1.05 0.21;
+                       dur:1100;
+                       delay:500;
+                       loop:true;
+                       easing:linear;">
+        </a-sphere>
+
+        <a-sphere
+            radius="0.07"
+            color="#00FF00"
+            animation="property:position;
+                       from:0.42 -1.05 0.09;
+                       to:0.82 -1.05 0.09;
+                       dur:900;
+                       delay:700;
+                       loop:true;
+                       easing:linear;">
+        </a-sphere>
+
+        <a-sphere
+            radius="0.07"
+            color="#00FF00"
+            animation="property:position;
+                       from:1.20 -0.85 0.09;
+                       to:1.20 0.85 0.09;
+                       dur:1800;
+                       delay:900;
+                       loop:true;
+                       easing:linear;">
+        </a-sphere>
+
+        <a-sphere
+            radius="0.07"
+            color="#00FF00"
+            animation="property:position;
+                       from:0.90 1.05 0.09;
+                       to:0.18 1.05 0.09;
+                       dur:1100;
+                       delay:1100;
+                       loop:true;
+                       easing:linear;">
+        </a-sphere>
+
+        <a-sphere
+            radius="0.07"
+            color="#00FF00"
+            animation="property:position;
+                       from:-0.18 1.05 0.09;
+                       to:-0.90 1.05 0.09;
+                       dur:1100;
+                       delay:1300;
+                       loop:true;
+                       easing:linear;">
+        </a-sphere>
+
+    </a-entity>
+
+</a-entity>
+
+</a-marker>
+
+<a-entity camera></a-entity>
+
+</a-scene>
+
+
+<script>
+
+const langkahPanduan=[
+    {
+        tajuk:"🔋 LITAR LENGKAP",
+        teks:"Bateri, wayar dan perintang disambungkan dalam satu gelung tertutup. Arus hanya dapat mengalir apabila litar lengkap.",
+        formula:false,
+        sorotan:"litar"
+    },
+    {
+        tajuk:"⚡ SUMBER VOLTAN",
+        teks:"Bateri membekalkan voltan sebagai sumber tenaga elektrik yang menggerakkan arus di dalam litar.",
+        formula:false,
+        sorotan:"bateri"
+    },
+    {
+        tajuk:"🟢 ARUS ELEKTRIK",
+        teks:"Arus elektrik mengalir dari terminal positif bateri melalui wayar dan perintang sebelum kembali ke terminal negatif.",
+        formula:false,
+        sorotan:"arus"
+    },
+    {
+        tajuk:"🟤 PERINTANG",
+        teks:"Perintang menghalang aliran arus. Semakin besar rintangan, semakin kecil arus yang mengalir dalam litar.",
+        formula:false,
+        sorotan:"perintang"
+    },
+    {
+        tajuk:"📘 HUKUM OHM",
+        teks:"Voltan (V), arus (I) dan rintangan (R) mempunyai hubungan seperti yang diterangkan oleh Hukum Ohm.",
+        formula:true,
+        sorotan:"formula"
+    }
+];
+
+let indeksLangkah=0;
+
+
+function mulaPembelajaran(){
+
+    document.getElementById("welcomeBox").style.display="none";
+    document.getElementById("guidePanel").style.display="block";
+    document.getElementById("reopenGuide").style.display="none";
+
+    document.getElementById("nextButton").style.display="block";
+    document.getElementById("prevButton").style.display="block";
+    document.getElementById("reflectionBox").style.display="none";
+    document.getElementById("reflectionFeedback").style.display="none";
+
+    indeksLangkah=0;
+
+    paparkanLangkah();
+}
+
+
+function paparkanLangkah(){
+
+    const data=langkahPanduan[indeksLangkah];
+    const panel=document.getElementById("guidePanel");
+
+    panel.classList.remove("panelIn");
+    void panel.offsetWidth;
+    panel.classList.add("panelIn");
+
+    document.getElementById("reflectionBox").style.display="none";
+    document.getElementById("reflectionFeedback").style.display="none";
+
+    document.getElementById("stepLabel").textContent=
+        "Langkah "+(indeksLangkah+1)+" / "+langkahPanduan.length;
+
+    document.getElementById("guideTitle").textContent=data.tajuk;
+    document.getElementById("guideText").textContent=data.teks;
+
+    document.getElementById("formulaBox").style.display=
+        data.formula ? "block" : "none";
+
+    document.querySelectorAll(".progressDot").forEach((dot,index)=>{
+        dot.classList.toggle("active",index===indeksLangkah);
+    });
+
+    const prev=document.getElementById("prevButton");
+
+    prev.disabled=indeksLangkah===0;
+    prev.style.opacity=indeksLangkah===0 ? "0.45" : "1";
+
+    document.getElementById("nextButton").textContent=
+        indeksLangkah===langkahPanduan.length-1
+        ? "Selesai ✓"
+        : "Seterusnya ➡";
+
+    kemasKiniSorotan(data.sorotan);
+}
+
+
+function kemasKiniSorotan(jenis){
+
+    const circuitScene=document.getElementById("circuitScene");
+    const batteryGroup=document.getElementById("batteryGroup");
+    const wireGroup=document.getElementById("wireGroup");
+    const currentGroup=document.getElementById("currentGroup");
+    const resistorGroup=document.getElementById("resistorGroup");
+    const batteryHighlight=document.getElementById("batteryHighlight");
+    const resistorHighlight=document.getElementById("resistorHighlight");
+
+    // Hentikan semua sorotan lama
+
+    circuitScene.removeAttribute("animation__highlight");
+    batteryGroup.removeAttribute("animation__highlight");
+    wireGroup.removeAttribute("animation__highlight");
+    currentGroup.removeAttribute("animation__highlight");
+    resistorGroup.removeAttribute("animation__highlight");
+
+    // Pulihkan saiz asal
+
+    circuitScene.setAttribute("scale","0.58 0.58 0.58");
+    batteryGroup.setAttribute("scale","1 1 1");
+    wireGroup.setAttribute("scale","1 1 1");
+    currentGroup.setAttribute("scale","1 1 1");
+    resistorGroup.setAttribute("scale","1 1 1");
+
+    // Sembunyikan cahaya bateri
+
+    batteryHighlight.setAttribute("opacity","0");
+    batteryHighlight.removeAttribute("animation__glow");
+
+    resistorHighlight.setAttribute("opacity","0");
+    resistorHighlight.removeAttribute("animation__glow");
+
+    // Langkah 1: seluruh litar berdenyut perlahan
+
+    if(jenis==="litar"){
+
+        circuitScene.setAttribute(
+            "animation__highlight",
+            "property:scale; from:0.58 0.58 0.58; to:0.61 0.61 0.61; dur:850; dir:alternate; loop:true; easing:easeInOutSine"
+        );
+    }
+
+    // Langkah 2: bateri diserlahkan
+
+    if(jenis==="bateri"){
+
+        batteryGroup.setAttribute(
+            "animation__highlight",
+            "property:scale; from:1 1 1; to:1.08 1.08 1.08; dur:700; dir:alternate; loop:true; easing:easeInOutSine"
+        );
+
+        batteryHighlight.setAttribute("opacity","0.75");
+
+        batteryHighlight.setAttribute(
+            "animation__glow",
+            "property:material.opacity; from:0.25; to:0.85; dur:650; dir:alternate; loop:true; easing:easeInOutSine"
+        );
+    }
+
+    // Langkah 3: wayar dan titik arus diserlahkan
+
+    if(jenis==="arus"){
+
+        wireGroup.setAttribute(
+            "animation__highlight",
+            "property:scale; from:1 1 1; to:1.025 1.025 1.025; dur:800; dir:alternate; loop:true; easing:easeInOutSine"
+        );
+
+        currentGroup.setAttribute(
+            "animation__highlight",
+            "property:scale; from:1 1 1; to:1.18 1.18 1.18; dur:600; dir:alternate; loop:true; easing:easeInOutSine"
+        );
+    }
+
+    // Langkah 4: perintang diserlahkan
+
+    if(jenis==="perintang"){
+
+        resistorGroup.setAttribute(
+            "animation__highlight",
+            "property:scale; from:1 1 1; to:1.14 1.14 1.14; dur:650; dir:alternate; loop:true; easing:easeInOutSine"
+        );
+
+        resistorHighlight.setAttribute("opacity","0.72");
+        resistorHighlight.setAttribute(
+            "animation__glow",
+            "property:material.opacity; from:0.22; to:0.85; dur:650; dir:alternate; loop:true; easing:easeInOutSine"
+        );
+    }
+
+    // Langkah 5: model kembali stabil supaya formula menjadi fokus
+}
+
+
+function langkahSeterusnya(){
+
+    if(indeksLangkah<langkahPanduan.length-1){
+
+        indeksLangkah++;
+        paparkanLangkah();
+
+    }else{
+
+        paparkanRefleksi();
+    }
+}
+
+
+function langkahSebelum(){
+
+    if(indeksLangkah>0){
+
+        indeksLangkah--;
+        paparkanLangkah();
+    }
+}
+
+
+
+function paparkanRefleksi(){
+
+    const panel=document.getElementById("guidePanel");
+    panel.classList.remove("panelIn");
+    void panel.offsetWidth;
+    panel.classList.add("panelIn");
+
+    document.getElementById("guideTitle").textContent="✅ SEMAK KEFAHAMAN";
+    document.getElementById("guideText").textContent=
+        "Jawab soalan ringkas ini berdasarkan Hukum Ohm.";
+
+    document.getElementById("formulaBox").style.display="block";
+    document.getElementById("reflectionBox").style.display="block";
+    document.getElementById("nextButton").style.display="none";
+    document.getElementById("prevButton").style.display="none";
+
+    document.getElementById("stepLabel").textContent="Refleksi Akhir";
+
+    document.querySelectorAll(".progressDot").forEach(dot=>{
+        dot.classList.add("active");
+    });
+
+    kemasKiniSorotan("formula");
+}
+
+
+function semakJawapan(jawapan){
+
+    const feedback=document.getElementById("reflectionFeedback");
+
+    if(jawapan==="B"){
+
+        feedback.style.display="block";
+        feedback.style.background="#E8F5E9";
+        feedback.style.color="#1B5E20";
+        feedback.textContent=
+            "Betul! Apabila rintangan meningkat dan voltan kekal, arus akan berkurang.";
+
+        setTimeout(()=>{
+            feedback.textContent=
+                "Tahniah! Anda telah melengkapkan penerokaan Hukum Ohm.";
+        },1500);
+
+        setTimeout(()=>{
+            tutupPanduan();
+        },3200);
+
+    }else{
+
+        feedback.style.display="block";
+        feedback.style.background="#FFEBEE";
+        feedback.style.color="#B71C1C";
+        feedback.textContent=
+            "Belum tepat. Gunakan hubungan I = V ÷ R dan cuba sekali lagi.";
+    }
+}
+
+
+function tutupPanduan(){
+
+    document.getElementById("guidePanel").style.display="none";
+    document.getElementById("reopenGuide").style.display="block";
+
+    kemasKiniSorotan("formula");
+}
+
+
+function bukaSemulaPanduan(){
+
+    document.getElementById("reopenGuide").style.display="none";
+    document.getElementById("guidePanel").style.display="block";
+
+    document.getElementById("nextButton").style.display="block";
+    document.getElementById("prevButton").style.display="block";
+    document.getElementById("reflectionBox").style.display="none";
+    document.getElementById("reflectionFeedback").style.display="none";
+
+    indeksLangkah=0;
+
+    paparkanLangkah();
+}
+
+</script>
+
+</body>
+</html>
