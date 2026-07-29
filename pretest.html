@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Pra Ujian - KVB VoltAR</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0d47a1, #1976d2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 18px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #0d47a1;
+            font-size: 30px;
+        }
+
+        h2 {
+            color: #333333;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instruction {
+            background: #e3f2fd;
+            border-left: 5px solid #1976d2;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .instruction p {
+            margin: 8px 0;
+            line-height: 1.5;
+            color: #333333;
+        }
+
+        .start-button,
+        .back-button {
+            width: 100%;
+            display: block;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .start-button {
+            background: #1976d2;
+            color: white;
+        }
+
+        .start-button:hover {
+            background: #0d47a1;
+        }
+
+        .back-button {
+            background: #eeeeee;
+            color: #333333;
+        }
+
+        .back-button:hover {
+            background: #dddddd;
+        }
+
+        .version {
+            margin-top: 22px;
+            color: #777777;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>KVB VoltAR</h1>
+
+        <h2>Pra Ujian</h2>
+
+        <div class="instruction">
+            <p><strong>Arahan:</strong></p>
+            <p>1. Jawab semua soalan yang diberikan.</p>
+            <p>2. Jangan merujuk nota atau bahan pembelajaran.</p>
+            <p>3. Masukkan nama, nombor matrik dan kelas dengan betul.</p>
+            <p>4. Tekan butang hantar selepas selesai menjawab.</p>
+            <p>5. Anggaran masa menjawab ialah 5 minit.</p>
+        </div>
+
+        <button class="start-button" onclick="startPretest()">
+            MULAKAN PRA UJIAN
+        </button>
+
+        <button class="back-button" onclick="goBack()">
+            ← Kembali ke Menu
+        </button>
+
+        <div class="version">
+            KVB VoltAR Version 3.1 Final
+        </div>
+
+    </div>
+
+    <script>
+        function startPretest() {
+
+            /*
+            Gantikan pautan di bawah dengan pautan
+            Google Form Pra Ujian selepas borang siap.
+            */
+
+            window.location.href =
+                "https://forms.gle/YASoSTmvcJ21H2LV7";
+        }
+
+        function goBack() {
+            window.location.href = "menu.html";
+        }
+    </script>
+
+</body>
+
+</html>
