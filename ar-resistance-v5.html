@@ -60,7 +60,9 @@ body{margin:0;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:
 </div>
 <button id="reopenGuide" onclick="bukaSemulaPanduan()">Buka Panduan</button>
 <a-scene embedded vr-mode-ui="enabled:false" arjs="sourceType:webcam; debugUIEnabled:false;">
-<a-marker preset="hiro">
+<a-marker
+    type="pattern"
+    url="markers/kvb-voltar-optimized.patt">
 
 <a-entity
     id="resistanceScene"
