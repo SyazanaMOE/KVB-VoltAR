@@ -222,7 +222,16 @@ button{
 <button id="factorBahan" class="experimentButton" onclick="pilihEksperimen('bahan')" aria-label="Eksperimen jenis bahan">🧪<br>BAHAN</button>
 <button id="factorSuhu" class="experimentButton" onclick="pilihEksperimen('suhu')" aria-label="Eksperimen suhu">🌡️<br>SUHU</button>
 </div>
-<button id="returnGuideButton" onclick="kembaliKePanduan()">↩ Kembali ke Panduan</button>
+<button id="finishExperimentButton"
+style="display:none;width:100%;margin-top:10px;padding:10px;border:none;border-radius:9px;background:#2E7D32;color:white;font-size:15px;font-weight:bold;"
+onclick="tamatEksperimen()">
+✅ Tamat Eksperimen
+</button>
+
+<button id="returnGuideButton"
+onclick="kembaliKePanduan()">
+↩ Kembali ke Panduan
+</button>
 </div>
 <div id="statusPanel">
 <div id="statusTitle">STATUS KERINTANGAN</div>
@@ -558,7 +567,12 @@ function mulaModeEksperimen(){
     document.getElementById("stepLabel").textContent="Penerokaan Bebas";
     pilihEksperimen("kerintangan");
 }
-
+let eksperimenSelesai={
+panjang:false,
+luas:false,
+bahan:false,
+suhu:false
+};
 function pilihEksperimen(jenis){
     document.querySelectorAll(".experimentButton").forEach(button=>{
         button.classList.remove("activeFactor");
@@ -570,7 +584,18 @@ function pilihEksperimen(jenis){
         bahan:"factorBahan",
         suhu:"factorSuhu"
     };
+if(eksperimenSelesai[jenis]!==undefined){
+    eksperimenSelesai[jenis]=true;
+}
 
+if(
+eksperimenSelesai.panjang &&
+eksperimenSelesai.luas &&
+eksperimenSelesai.bahan &&
+eksperimenSelesai.suhu
+){
+document.getElementById("finishExperimentButton").style.display="block";
+}
     if(butangAktif[jenis]){
         document.getElementById(butangAktif[jenis]).classList.add("activeFactor");
     }
@@ -640,6 +665,20 @@ function kembaliKePanduan(){
 
 function tutupPanduan(){document.getElementById("guidePanel").style.display="none";document.getElementById("reopenGuide").style.display="block";kemasKiniSorotan("formula")}
 function bukaSemulaPanduan(){document.getElementById("reopenGuide").style.display="none";document.getElementById("guidePanel").style.display="block";document.getElementById("nextButton").style.display="block";document.getElementById("prevButton").style.display="block";document.getElementById("reflectionBox").style.display="none";document.getElementById("reflectionFeedback").style.display="none";document.getElementById("completionBox").style.display="none";document.getElementById("experimentPanel").style.display="none";document.getElementById("statusPanel").style.display="block";document.getElementById("formulaBox").style.display="block";document.getElementById("guidePanel").classList.remove("experimentMode");indeksLangkah=0;paparkanLangkah()}
+function tamatEksperimen(){
+
+alert(
+"Tahniah!\n\n"+
+"Anda telah meneroka semua faktor kerintangan.\n\n"+
+"✓ Panjang ↑ → Kerintangan ↑\n"+
+"✓ Luas ↑ → Kerintangan ↓\n"+
+"✓ Jenis bahan menentukan kerintangan\n"+
+"✓ Suhu ↑ → Kerintangan logam ↑"
+);
+
+window.location.href="menu.html";
+
+}
 </script>
 </body>
 </html>
