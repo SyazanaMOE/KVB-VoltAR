@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>KVB VoltAR Version 4.6</title>
+<title>KVB VoltAR - Hukum Ohm</title>
 
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
@@ -752,12 +752,12 @@ body{
 <button id="backButton" onclick="window.location.href='ohm.html'">← Kembali</button>
 
 <div id="welcomeBox">
-    <h2>⚡ KVB VoltAR 4.6</h2>
-    <p>Teroka satu litar lengkap dan lihat komponen penting diserlahkan pada setiap langkah.</p>
+    <h2>⚡ KVB VoltAR Hukum Ohm</h2>
+    <p>Teroka konsep Hukum Ohm melalui simulasi Augmented Reality (AR) dan ikuti panduan langkah demi langkah untuk memahami hubungan antara voltan, arus dan rintangan.</p>
 
     <div class="tutorialStep">
         <div class="stepNumber">1</div>
-        <div>Imbas marker Hiro.</div>
+        <div>Imbas marker KVB VoltAR.</div>
     </div>
 
     <div class="tutorialStep">
@@ -871,36 +871,37 @@ arjs="sourceType:webcam; debugUIEnabled:false;">
 
 <!-- Kutub Negatif (-) -->
 <a-circle
-    position="-0.18 1.05 0.18"
-    radius="0.070"
+    position="-0.22 1.05 0.30"
+    radius="0.11"
     color="#37474F"
-    opacity="0.98">
+    opacity="1"
+    material="side:double;">
 </a-circle>
 
 <a-text
     value="-"
-    position="-0.18 1.05 0.20"
+    position="-0.22 1.05 0.32"
     align="center"
     baseline="center"
-    width="1.00"
+    width="1.55"
     color="#FFFFFF">
 </a-text>
 
 <!-- Kutub Positif (+) -->
 <a-circle
-    position="0.18 1.05 0.18"
-    radius="0.070"
+    position="0.22 1.05 0.30"
+    radius="0.11"
     color="#D32F2F"
-    opacity="0.98"
-    stroke="color:#FFFFFF; width:0.012">
+    opacity="1"
+    material="side:double;">
 </a-circle>
 
 <a-text
     value="+"
-    position="0.18 1.05 0.20"
+    position="0.22 1.05 0.32"
     align="center"
     baseline="center"
-    width="1.00"
+    width="1.55"
     color="#FFFFFF">
 </a-text>
 
