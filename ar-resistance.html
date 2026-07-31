@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KVB VoltAR - Kerintangan Version 5 Development</title>
+<title>KVB VoltAR - Kerintangan</title>
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 <style>
@@ -180,7 +180,7 @@ button{
 <body>
 <button id="backButton" onclick="window.location.href='resistance.html'">← Kembali</button>
 <div id="welcomeBox">
-<h2>🧪 KVB VoltAR Kerintangan v5</h2>
+<h2>🧪 KVB VoltAR Kerintangan</h2>
 <p>Teroka faktor yang mempengaruhi kerintangan sebuah konduktor.</p>
 <div class="tutorialStep"><div class="stepNumber">1</div><div>Imbas marker KVB VoltAR untuk memulakan pembelajaran AR.</div></div>
 <div class="tutorialStep"><div class="stepNumber">2</div><div>Perhatikan model dawai serta simbol L, A, ρ dan suhu.</div></div>
@@ -245,6 +245,45 @@ onclick="kembaliKePanduan()">
 <div id="guideControls"><button id="prevButton" class="guideButton" onclick="langkahSebelum()">⬅ Sebelum</button><button id="nextButton" class="guideButton" onclick="langkahSeterusnya()">Seterusnya ➡</button></div>
 </div>
 <button id="reopenGuide" onclick="bukaSemulaPanduan()">Buka Panduan</button>
+<div id="thankYouBox"
+style="
+display:none;
+position:fixed;
+inset:0;
+z-index:9000;
+background:rgba(0,0,0,0.82);
+align-items:center;
+justify-content:center;
+padding:24px;
+box-sizing:border-box;
+">
+
+    <div style="
+    width:min(88%,380px);
+    padding:28px 22px;
+    background:white;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,0.45);
+    ">
+
+        <div style="font-size:46px;">🎉</div>
+
+        <h2 style="margin:10px 0;color:#0D47A1;">
+            Tahniah!
+        </h2>
+
+        <p style="margin:0;color:#455A64;line-height:1.5;">
+            Anda telah berjaya meneroka semua faktor kerintangan.
+        </p>
+
+        <p style="margin:14px 0 0;color:#1B5E20;font-weight:bold;">
+            Terima kasih kerana menggunakan KVB VoltAR.
+        </p>
+
+    </div>
+
+</div>    
 <a-scene embedded vr-mode-ui="enabled:false" arjs="sourceType:webcam; debugUIEnabled:false;">
 <a-marker
     type="pattern"
@@ -667,14 +706,16 @@ function tutupPanduan(){document.getElementById("guidePanel").style.display="non
 function bukaSemulaPanduan(){document.getElementById("reopenGuide").style.display="none";document.getElementById("guidePanel").style.display="block";document.getElementById("nextButton").style.display="block";document.getElementById("prevButton").style.display="block";document.getElementById("reflectionBox").style.display="none";document.getElementById("reflectionFeedback").style.display="none";document.getElementById("completionBox").style.display="none";document.getElementById("experimentPanel").style.display="none";document.getElementById("statusPanel").style.display="block";document.getElementById("formulaBox").style.display="block";document.getElementById("guidePanel").classList.remove("experimentMode");indeksLangkah=0;paparkanLangkah()}
 function tamatEksperimen(){
 
-alert(
-"Tahniah!\n\n"+
-"Anda telah meneroka semua faktor kerintangan.\n\n"+
-"✓ Panjang ↑ → Kerintangan ↑\n"+
-"✓ Luas ↑ → Kerintangan ↓\n"+
-"✓ Jenis bahan menentukan kerintangan\n"+
-"✓ Suhu ↑ → Kerintangan logam ↑"
-);
+    document.getElementById("guidePanel").style.display="none";
+
+    const thankYouBox=document.getElementById("thankYouBox");
+    thankYouBox.style.display="flex";
+
+    setTimeout(()=>{
+        window.location.href="menu.html";
+    },2500);
+
+}
 
 window.location.href="menu.html";
 
