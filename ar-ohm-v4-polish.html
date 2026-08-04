@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>KVB VoltAR - Hukum Ohm</title>
+<title>KVB VoltAR Version 4.6</title>
 
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
@@ -744,6 +744,157 @@ body{
         font-size:22px;
     }
 }
+
+/* ================================================= */
+/* EKSPLORASI INTERAKTIF V = I × R                   */
+/* ================================================= */
+
+#exploreButton{
+    position:fixed;
+    top:max(12px,env(safe-area-inset-top));
+    right:12px;
+    z-index:5400;
+    padding:10px 13px;
+    border:none;
+    border-radius:13px;
+    background:linear-gradient(135deg,#E65100,#FB8C00);
+    color:#FFFFFF;
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:0 5px 16px rgba(0,0,0,.30);
+}
+
+#ohmExplorer{
+    display:none;
+    position:fixed;
+    top:62px;
+    right:10px;
+    z-index:5700;
+    width:min(245px,88vw);
+    max-height:72vh;
+    overflow-y:auto;
+    padding:15px;
+    box-sizing:border-box;
+    background:rgba(255,255,255,.97);
+    color:#263238;
+    border:1px solid rgba(255,255,255,.8);
+    border-radius:18px;
+    box-shadow:0 10px 32px rgba(0,0,0,.40);
+    backdrop-filter:blur(9px);
+}
+
+#ohmExplorer h3{
+    margin:0 30px 4px 0;
+    color:#0D47A1;
+    font-size:17px;
+    line-height:1.25;
+}
+
+#ohmExplorer .explorerIntro{
+    margin:0 0 10px;
+    color:#607D8B;
+    font-size:12px;
+    line-height:1.4;
+}
+
+#closeExplorer{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:29px;
+    height:29px;
+    padding:0;
+    border:none;
+    border-radius:50%;
+    background:#D32F2F;
+    color:#FFFFFF;
+    font-size:20px;
+    line-height:29px;
+    cursor:pointer;
+}
+
+.controlLabel{
+    margin:11px 0 6px;
+    color:#455A64;
+    font-size:13px;
+    font-weight:800;
+}
+
+.controlRow{
+    display:flex;
+    gap:6px;
+}
+
+.valueButton{
+    flex:1;
+    min-height:38px;
+    padding:7px 3px;
+    border:1px solid #90CAF9;
+    border-radius:9px;
+    background:#E3F2FD;
+    color:#0D47A1;
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.valueButton.active{
+    background:#1565C0;
+    color:#FFFFFF;
+    border-color:#1565C0;
+    box-shadow:0 3px 9px rgba(21,101,192,.24);
+}
+
+#currentResult{
+    margin-top:13px;
+    padding:10px 8px;
+    background:#E8F5E9;
+    color:#1B5E20;
+    border:1px solid #C8E6C9;
+    border-radius:11px;
+    text-align:center;
+    font-size:15px;
+    font-weight:800;
+}
+
+#relationshipMessage{
+    margin:9px 0 0;
+    color:#455A64;
+    font-size:12px;
+    line-height:1.45;
+    text-align:center;
+}
+
+#resetExplorer{
+    display:block;
+    width:100%;
+    min-height:38px;
+    margin-top:10px;
+    border:1px solid #CFD8DC;
+    border-radius:9px;
+    background:#ECEFF1;
+    color:#455A64;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+@media(max-width:480px){
+    #exploreButton{
+        right:8px;
+        padding:10px 11px;
+        font-size:12px;
+    }
+
+    #ohmExplorer{
+        top:60px;
+        right:8px;
+        width:min(235px,90vw);
+        padding:13px;
+    }
+}
+
 </style>
 </head>
 
@@ -752,8 +903,8 @@ body{
 <button id="backButton" onclick="window.location.href='ohm.html'">← Kembali</button>
 
 <div id="welcomeBox">
-    <h2>⚡ KVB VoltAR Hukum Ohm</h2>
-    <p>Teroka konsep Hukum Ohm melalui simulasi Augmented Reality (AR) dan ikuti panduan langkah demi langkah untuk memahami hubungan antara voltan, arus dan rintangan.</p>
+    <h2>⚡ KVB VoltAR 4.6</h2>
+    <p>Teroka satu litar lengkap dan lihat komponen penting diserlahkan pada setiap langkah.</p>
 
     <div class="tutorialStep">
         <div class="stepNumber">1</div>
@@ -834,6 +985,84 @@ body{
     Buka Panduan
 </button>
 
+
+<button id="exploreButton" type="button" onclick="bukaEksplorasi()">
+    ⚡ Eksplorasi V=IR
+</button>
+
+<div id="ohmExplorer">
+
+    <button id="closeExplorer" type="button" onclick="tutupEksplorasi()">
+        ×
+    </button>
+
+    <h3>Eksplorasi Hukum Ohm</h3>
+
+    <p class="explorerIntro">
+        Ubah V dan R, kemudian perhatikan nilai serta kelajuan arus.
+    </p>
+
+    <div class="controlLabel">Voltan, V</div>
+
+    <div class="controlRow">
+        <button class="valueButton voltageButton"
+                type="button"
+                onclick="tetapkanVoltan(3,this)">
+            3 V
+        </button>
+
+        <button class="valueButton voltageButton active"
+                type="button"
+                onclick="tetapkanVoltan(6,this)">
+            6 V
+        </button>
+
+        <button class="valueButton voltageButton"
+                type="button"
+                onclick="tetapkanVoltan(9,this)">
+            9 V
+        </button>
+    </div>
+
+    <div class="controlLabel">Rintangan, R</div>
+
+    <div class="controlRow">
+        <button class="valueButton resistanceButton"
+                type="button"
+                onclick="tetapkanRintangan(3,this)">
+            3 Ω
+        </button>
+
+        <button class="valueButton resistanceButton active"
+                type="button"
+                onclick="tetapkanRintangan(6,this)">
+            6 Ω
+        </button>
+
+        <button class="valueButton resistanceButton"
+                type="button"
+                onclick="tetapkanRintangan(9,this)">
+            9 Ω
+        </button>
+    </div>
+
+    <div id="currentResult">
+        I = 6 ÷ 6 = 1.00 A
+    </div>
+
+    <p id="relationshipMessage">
+        Arus sederhana. Cuba ubah nilai V atau R.
+    </p>
+
+    <button id="resetExplorer"
+            type="button"
+            onclick="setSemulaEksplorasi()">
+        ↻ Set Semula
+    </button>
+
+</div>
+
+
 <a-scene
 embedded
 vr-mode-ui="enabled:false"
@@ -852,8 +1081,8 @@ arjs="sourceType:webcam; debugUIEnabled:false;">
 
 <a-entity
     id="circuitScene"
-    scale="0.46 0.46 0.46"
-    position="0 -0.10 0">
+    scale="0.58 0.58 0.58"
+    position="0 0.15 0">
 
     <!-- ========================= -->
     <!-- KUMPULAN BATERI -->
@@ -871,40 +1100,38 @@ arjs="sourceType:webcam; debugUIEnabled:false;">
 
 <!-- Kutub Negatif (-) -->
 <a-circle
-    position="-0.22 1.05 0.30"
-    radius="0.11"
+    position="-0.18 1.05 0.18"
+    radius="0.070"
     color="#37474F"
-    opacity="1"
-    material="side:double;">
+    opacity="0.98">
 </a-circle>
 
 <a-text
     value="-"
-    position="-0.22 1.05 0.32"
+    position="-0.18 1.05 0.20"
     align="center"
     baseline="center"
-    width="1.55"
+    width="1.00"
     color="#FFFFFF">
 </a-text>
 
 <!-- Kutub Positif (+) -->
 <a-circle
-    position="0.22 1.05 0.30"
-    radius="0.11"
+    position="0.18 1.05 0.18"
+    radius="0.070"
     color="#D32F2F"
-    opacity="1"
-    material="side:double;">
+    opacity="0.98"
+    stroke="color:#FFFFFF; width:0.012">
 </a-circle>
 
 <a-text
     value="+"
-    position="0.22 1.05 0.32"
+    position="0.18 1.05 0.20"
     align="center"
     baseline="center"
-    width="1.55"
+    width="1.00"
     color="#FFFFFF">
 </a-text>
-
         <!-- Cahaya penunjuk bateri -->
         <a-ring
             id="batteryHighlight"
@@ -1267,7 +1494,7 @@ function kemasKiniSorotan(jenis){
 
     // Pulihkan saiz asal
 
-    circuitScene.setAttribute("scale","0.46 0.46 0.46");
+    circuitScene.setAttribute("scale","0.58 0.58 0.58");
     batteryGroup.setAttribute("scale","1 1 1");
     wireGroup.setAttribute("scale","1 1 1");
     currentGroup.setAttribute("scale","1 1 1");
@@ -1287,7 +1514,7 @@ function kemasKiniSorotan(jenis){
 
         circuitScene.setAttribute(
             "animation__highlight",
-           "property:scale; from:0.46 0.46 0.46; to:0.49 0.49 0.49; dur:850; dir:alternate; loop:true; easing:easeInOutSine"
+            "property:scale; from:0.58 0.58 0.58; to:0.61 0.61 0.61; dur:850; dir:alternate; loop:true; easing:easeInOutSine"
         );
     }
 
@@ -1448,6 +1675,183 @@ function bukaSemulaPanduan(){
     indeksLangkah=0;
 
     paparkanLangkah();
+}
+
+
+
+/* ================================================= */
+/* EKSPLORASI INTERAKTIF V = I × R                   */
+/* ================================================= */
+
+let nilaiVoltan=6;
+let nilaiRintangan=6;
+
+const dataAnimasiArus=[
+    {
+        from:"-1.20 0.85 0.09",
+        to:"-1.20 -0.85 0.09",
+        dur:1800,
+        delay:0
+    },
+    {
+        from:"-0.82 -1.05 0.09",
+        to:"-0.42 -1.05 0.09",
+        dur:900,
+        delay:300
+    },
+    {
+        from:"-0.30 -1.05 0.21",
+        to:"0.30 -1.05 0.21",
+        dur:1100,
+        delay:500
+    },
+    {
+        from:"0.42 -1.05 0.09",
+        to:"0.82 -1.05 0.09",
+        dur:900,
+        delay:700
+    },
+    {
+        from:"1.20 -0.85 0.09",
+        to:"1.20 0.85 0.09",
+        dur:1800,
+        delay:900
+    },
+    {
+        from:"0.90 1.05 0.09",
+        to:"0.18 1.05 0.09",
+        dur:1100,
+        delay:1100
+    },
+    {
+        from:"-0.18 1.05 0.09",
+        to:"-0.90 1.05 0.09",
+        dur:1100,
+        delay:1300
+    }
+];
+
+
+function bukaEksplorasi(){
+
+    document.getElementById("ohmExplorer").style.display="block";
+    kemasKiniEksperimen();
+}
+
+
+function tutupEksplorasi(){
+
+    document.getElementById("ohmExplorer").style.display="none";
+}
+
+
+function tetapkanVoltan(nilai,butang){
+
+    nilaiVoltan=nilai;
+
+    document.querySelectorAll(".voltageButton").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    butang.classList.add("active");
+    kemasKiniEksperimen();
+}
+
+
+function tetapkanRintangan(nilai,butang){
+
+    nilaiRintangan=nilai;
+
+    document.querySelectorAll(".resistanceButton").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    butang.classList.add("active");
+    kemasKiniEksperimen();
+}
+
+
+function setSemulaEksplorasi(){
+
+    nilaiVoltan=6;
+    nilaiRintangan=6;
+
+    document.querySelectorAll(".voltageButton").forEach(btn=>{
+        btn.classList.toggle("active",btn.textContent.trim()==="6 V");
+    });
+
+    document.querySelectorAll(".resistanceButton").forEach(btn=>{
+        btn.classList.toggle("active",btn.textContent.trim()==="6 Ω");
+    });
+
+    kemasKiniEksperimen();
+}
+
+
+function kemasKiniEksperimen(){
+
+    const arus=nilaiVoltan/nilaiRintangan;
+
+    document.getElementById("currentResult").textContent=
+        "I = "+nilaiVoltan+" ÷ "+nilaiRintangan+
+        " = "+arus.toFixed(2)+" A";
+
+    let mesej="";
+
+    if(arus>1.5){
+
+        mesej="V tinggi atau R rendah menghasilkan arus lebih besar. Bebola bergerak lebih laju.";
+
+    }else if(arus<0.7){
+
+        mesej="V rendah atau R tinggi menghasilkan arus lebih kecil. Bebola bergerak lebih perlahan.";
+
+    }else{
+
+        mesej="Arus sederhana. Cuba ubah nilai V atau R.";
+    }
+
+    document.getElementById("relationshipMessage").textContent=mesej;
+    ubahKelajuanArus(arus);
+}
+
+
+function ubahKelajuanArus(arus){
+
+    const bebola=document.querySelectorAll("#currentGroup a-sphere");
+
+    /*
+       Arus lebih besar = tempoh animasi lebih pendek.
+       Had faktor mengelakkan animasi terlalu laju atau terlalu perlahan.
+    */
+
+    let faktor=1/arus;
+    faktor=Math.max(0.40,Math.min(2.40,faktor));
+
+    bebola.forEach((bola,index)=>{
+
+        const data=dataAnimasiArus[index];
+
+        if(!data){
+            return;
+        }
+
+        const durasiBaharu=Math.round(data.dur*faktor);
+        const delayBaharu=Math.round(data.delay*faktor);
+
+        bola.removeAttribute("animation");
+
+        bola.setAttribute(
+            "animation",
+            "property:position;"+
+            "from:"+data.from+";"+
+            "to:"+data.to+";"+
+            "dur:"+durasiBaharu+";"+
+            "delay:"+delayBaharu+";"+
+            "loop:true;"+
+            "easing:linear;"
+        );
+    });
 }
 
 </script>
