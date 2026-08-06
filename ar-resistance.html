@@ -3,9 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KVB VoltAR - Kerintangan</title>
+<title>KVB VoltAR - Kerintangan Stable Mobile</title>
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+<script>
+AFRAME.registerComponent("stable-marker",{
+    schema:{
+        target:{type:"selector"},
+        stableFrames:{type:"int",default:12},
+        jumpRatio:{type:"number",default:0.22},
+        minDelay:{type:"number",default:550}
+    },
+
+    init:function(){
+        this.stableCount=0;
+        this.lastDistance=null;
+        this.foundAt=0;
+        this.cameraPosition=new THREE.Vector3();
+        this.markerPosition=new THREE.Vector3();
+
+        this.hideTarget=()=>{
+            const target=this.data.target;
+            if(target){
+                target.object3D.visible=false;
+            }
+        };
+
+        this.resetTracking=()=>{
+            this.stableCount=0;
+            this.lastDistance=null;
+            this.foundAt=performance.now();
+            this.hideTarget();
+        };
+
+        this.el.addEventListener("markerFound",this.resetTracking);
+        this.el.addEventListener("markerLost",this.resetTracking);
+
+        this.hideTarget();
+    },
+
+    tick:function(){
+        const target=this.data.target;
+        const scene=this.el.sceneEl;
+
+        if(!target || !scene || !scene.camera){
+            return;
+        }
+
+        if(!this.el.object3D.visible){
+            target.object3D.visible=false;
+            this.stableCount=0;
+            this.lastDistance=null;
+            return;
+        }
+
+        if(performance.now()-this.foundAt<this.data.minDelay){
+            target.object3D.visible=false;
+            return;
+        }
+
+        scene.camera.getWorldPosition(this.cameraPosition);
+        this.el.object3D.getWorldPosition(this.markerPosition);
+
+        const distance=this.cameraPosition.distanceTo(this.markerPosition);
+
+        if(!Number.isFinite(distance) || distance<=0){
+            target.object3D.visible=false;
+            this.stableCount=0;
+            this.lastDistance=null;
+            return;
+        }
+
+        let jumpDetected=false;
+
+        if(this.lastDistance!==null){
+            const ratio=Math.abs(distance-this.lastDistance)/
+                Math.max(this.lastDistance,0.001);
+
+            jumpDetected=ratio>this.data.jumpRatio;
+        }
+
+        if(jumpDetected){
+            this.stableCount=0;
+            target.object3D.visible=false;
+        }else{
+            this.stableCount++;
+
+            if(this.stableCount>=this.data.stableFrames){
+                target.object3D.visible=true;
+            }
+        }
+
+        this.lastDistance=distance;
+    }
+});
+</script>
+
 
 <script>
 AFRAME.registerComponent("screen-facing",{
@@ -317,9 +411,15 @@ box-sizing:border-box;
     type="pattern"
     url="markers/kvb-voltar-optimized.patt"
     smooth="true"
-    smoothCount="10"
-    smoothTolerance="0.01"
-    smoothThreshold="5">
+    smoothCount="20"
+    smoothTolerance="0.005"
+    smoothThreshold="2"
+    stable-marker="target: #stableResistanceRoot; stableFrames: 12; jumpRatio: 0.22; minDelay: 550">
+
+<a-entity
+    id="stableResistanceRoot"
+    scale="0.84 0.84 0.84"
+    visible="false">
 
 <a-entity
     id="resistanceScene"
@@ -430,6 +530,8 @@ box-sizing:border-box;
         </a-entity>
 
     </a-entity>
+
+</a-entity>
 
 </a-entity>
 
